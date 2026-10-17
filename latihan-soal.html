@@ -7,54 +7,58 @@
   <title>Latihan Soal JLPT — Nihongo Studio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet" />
   <style>
     :root {
       color-scheme: light;
-      --bg: #f5f3ef;
-      --bg-2: #f7f0f3;
-      --card: #ffffff;
-      --card-alt: #faf8f5;
-      --ink: #1e2430;
-      --muted: #6d7785;
-      --line: #e8e2dc;
-      --accent: #bb536b;
-      --accent-2: #eab4c0;
-      --accent-soft: #f8eaf0;
-      --nav: #222d3c;
-      --nav-ink: #f3f7fa;
+      --bg: #f3f0e8;
+      --bg-2: #ebe6dc;
+      --card: #fbfaf6;
+      --card-alt: #f3f0e8;
+      --ink: #252b26;
+      --muted: #747970;
+      --line: #e2ded4;
+      --accent: #b85f4b;
+      --accent-2: #d99a7f;
+      --accent-soft: #f5e8e1;
+      --nav: #354a3e;
+      --nav-ink: #f7f4ed;
+      --hero: #354a3e;
+      --hero-ink: #f7f4ed;
       --success: #1b7f59;
       --success-soft: #e7f7ef;
       --danger: #c64a57;
       --danger-soft: #fff0f2;
       --warning: #8a5b00;
       --warning-soft: #fff4dd;
-      --shadow: 0 18px 38px rgba(23, 31, 42, 0.08);
-      --panel-radius: 22px;
+      --shadow: 0 12px 28px rgba(43, 45, 36, 0.045);
+      --panel-radius: 18px;
       --font-base: 16px;
     }
 
     :root[data-theme="dark"] {
       color-scheme: dark;
-      --bg: #111822;
-      --bg-2: #1a2430;
-      --card: #1d2a38;
-      --card-alt: #17212c;
-      --ink: #edf2f7;
-      --muted: #a4b0be;
-      --line: #2e3b4d;
-      --accent: #f29aac;
-      --accent-2: #da7d94;
-      --accent-soft: #3b2834;
-      --nav: #f4f7fb;
-      --nav-ink: #161f2a;
-      --success: #9fe0bc;
-      --success-soft: #1c3a2d;
-      --danger: #ffb7c0;
-      --danger-soft: #472931;
-      --warning: #f4d289;
-      --warning-soft: #473917;
-      --shadow: 0 18px 38px rgba(0, 0, 0, 0.28);
+      --bg: #191d1a;
+      --bg-2: #202520;
+      --card: #242a25;
+      --card-alt: #1e241f;
+      --ink: #eeeae0;
+      --muted: #a8aa9e;
+      --line: #373e37;
+      --accent: #d58a70;
+      --accent-2: #e2aa90;
+      --accent-soft: #382b25;
+      --nav: #d4dfcf;
+      --nav-ink: #202820;
+      --hero: #293b31;
+      --hero-ink: #f3eee3;
+      --success: #9dcc9e;
+      --success-soft: #28372b;
+      --danger: #e6a092;
+      --danger-soft: #3c2a26;
+      --warning: #dfc48a;
+      --warning-soft: #383426;
+      --shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
     }
 
     html {
@@ -64,12 +68,9 @@
     body {
       margin: 0;
       min-height: 100vh;
-      background:
-        radial-gradient(circle at top left, rgba(235, 184, 197, 0.32), transparent 26rem),
-        radial-gradient(circle at bottom right, rgba(112, 167, 206, 0.22), transparent 24rem),
-        var(--bg);
+      background: var(--bg);
       color: var(--ink);
-      font-family: "Inter", "Noto Sans JP", sans-serif;
+      font-family: "DM Sans", "Noto Sans JP", sans-serif;
       transition: background 180ms ease, color 180ms ease;
     }
 
@@ -109,13 +110,13 @@
     .brand-mark {
       width: 42px;
       height: 42px;
-      border-radius: 14px;
+      border-radius: 12px;
       display: grid;
       place-items: center;
-      background: linear-gradient(135deg, var(--nav), #3a506f);
+      background: var(--nav);
       color: var(--nav-ink);
       font-size: 1.2rem;
-      box-shadow: var(--shadow);
+      box-shadow: none;
     }
 
     .nav {
@@ -148,26 +149,34 @@
       border-color: var(--accent);
     }
 
+    .nav a:hover,
+    .nav button:hover {
+      background: var(--accent-soft);
+    }
+
     .hero {
-      border-radius: 28px;
-      background: linear-gradient(135deg, #27364a 0%, #41536c 55%, #5d7184 100%);
-      color: #edf2f6;
-      box-shadow: var(--shadow);
+      border-radius: 20px;
+      background: var(--hero);
+      color: var(--hero-ink);
       padding: clamp(22px, 4vw, 38px);
       margin-bottom: 18px;
       position: relative;
       overflow: hidden;
+      isolation: isolate;
     }
 
     .hero::after {
-      content: "";
       position: absolute;
-      inset: auto -110px -110px auto;
-      width: 240px;
-      height: 240px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.07);
-      filter: blur(5px);
+      z-index: -1;
+      right: clamp(24px, 7vw, 88px);
+      bottom: -0.46em;
+      content: "学";
+      color: rgba(247, 244, 237, 0.075);
+      font-family: "Noto Sans JP", sans-serif;
+      font-size: clamp(9rem, 19vw, 17rem);
+      font-weight: 700;
+      line-height: 1;
+      pointer-events: none;
     }
 
     .hero .eyebrow {
@@ -176,7 +185,7 @@
       text-transform: uppercase;
       font-weight: 800;
       font-size: 0.72rem;
-      color: #f5c9d3;
+      color: #e3ad91;
       margin-bottom: 10px;
     }
 
@@ -184,15 +193,16 @@
       margin: 0;
       font-size: clamp(2rem, 3vw, 3rem);
       line-height: 1.08;
-      letter-spacing: -0.06em;
+      letter-spacing: -0.055em;
       max-width: 800px;
     }
 
     .hero p {
       margin: 12px 0 0;
       max-width: 860px;
-      color: rgba(237, 242, 246, 0.82);
+      color: rgba(247, 244, 237, 0.78);
       line-height: 1.7;
+      max-width: 620px;
     }
 
     .panel {
@@ -344,7 +354,7 @@
     .passage-pane {
       overflow-y: auto;
       padding: 18px 18px 12px;
-      background: linear-gradient(180deg, var(--card) 0%, var(--card-alt) 100%);
+      background: var(--card);
       border-right: 1px solid var(--line);
     }
 
@@ -352,7 +362,7 @@
       position: sticky;
       top: 0;
       padding: 16px 18px 12px;
-      background: rgba(255,255,255,0.03);
+      background: var(--card);
     }
 
     .browser-panel {
@@ -400,7 +410,7 @@
       line-height: 2.1;
       font-size: 1.08rem;
       color: var(--ink);
-      background: linear-gradient(180deg, transparent, rgba(255,255,255,0.02));
+      background: transparent;
       padding: 10px 6px 10px 0;
     }
 
@@ -460,7 +470,7 @@
       font-size: 0.96rem;
       line-height: 1.7;
       border: 1px solid var(--line);
-      background: linear-gradient(180deg, var(--card-alt), var(--card));
+      background: var(--card-alt);
     }
 
     .explain-box strong,
@@ -552,7 +562,7 @@
       margin-top: 18px;
       padding: 18px;
       border-radius: 20px;
-      background: linear-gradient(180deg, var(--card-alt), rgba(255,255,255,0.02));
+      background: var(--card-alt);
       border: 1px solid var(--line);
     }
 
@@ -652,10 +662,10 @@
     </header>
 
     <section class="hero" aria-label="Header ujian">
-      <div class="eyebrow">JLPT Simulator</div>
+      <div class="eyebrow">Persiapan JLPT</div>
       <h1>Latihan Soal N5 / N4</h1>
       <p>
-        simulasi ujian jlpt by ikhsan.
+        Latihan bahasa jepunk by isan
       </p>
     </section>
 
