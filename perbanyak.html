@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Perbanyak Data JS</title>
+</head>
+<body>
+    <h2>Alat Perbanyak Data (Menjadi 500)</h2>
+    <p>Karena skrip sistem merusak tulisan Jepang (masalah encoding Windows), kita gunakan browser untuk memperbanyak datanya.</p>
+    <p><b>Langkah-langkah:</b></p>
+    <ol>
+        <li>Pastikan Anda sudah menekan <b>Ctrl + Z</b> di file data.js pada editor Anda sampai teks Jepangnya kembali normal.</li>
+        <li><b>WAJIB:</b> Tekan <b>Ctrl + S</b> (Save) agar file data.js yang benar tersimpan di disk.</li>
+        <li>Setelah disimpan, <button onclick="window.location.reload()">Refresh Halaman Ini</button></li>
+        <li>Lalu klik tombol di bawah untuk mendownload <code>data_baru.js</code> yang sudah berisi 500 kata.</li>
+        <li>Ganti isi <code>data.js</code> Anda dengan isi dari <code>data_baru.js</code> yang didownload.</li>
+    </ol>
+    <button id="btn-download" style="padding: 10px 20px; font-size: 16px; background: blue; color: white; cursor: pointer;">Download data_baru.js</button>
+    
+    <script src="data.js"></script>
+    <script>
+        document.getElementById('btn-download').addEventListener('click', () => {
+            if (!window.rawVerbs || window.rawVerbs[0][0].includes("ãƒ")) {
+                alert("Teks Jepang masih rusak! Tolong Undo (Ctrl+Z) lalu Save (Ctrl+S) file data.js di editor Anda, lalu refresh halaman ini.");
+                return;
+            }
+            
+            // Perbanyak array menjadi 5 kali lipat (500)
+            const newVerbs = [];
+            const newNouns = [];
+            const newAdjs = [];
+            
+            for(let i = 0; i < 5; i++) {
+                newVerbs.push(...rawVerbs);
+                newNouns.push(...rawNouns);
+                newAdjs.push(...rawAdjectives);
+            }
+            
+            let fileContent = `const rawVerbs = ${JSON.stringify(newVerbs, null, 4)};\n\n`;
+            fileContent += `const rawNouns = ${JSON.stringify(newNouns, null, 4)};\n\n`;
+            fileContent += `const rawAdjectives = ${JSON.stringify(newAdjs, null, 4)};\n\n`;
+            fileContent += `const rawHiragana = ${JSON.stringify(rawHiragana, null, 4)};\n\n`;
+            fileContent += `const rawKatakana = ${JSON.stringify(rawKatakana, null, 4)};\n\n`;
+            
+            fileContent += `const hiraganaObj = mapToObj(rawHiragana);
+const katakanaObj = mapToObj(rawKatakana);
+
+const verbsObj = mapToObj(rawVerbs);
+const nounsObj = mapToObj(rawNouns);
+const adjObj = mapToObj(rawAdjectives);
+
+const kataKerja = verbsObj;
+const kataBenda = nounsObj;
+const kataSifat = adjObj;
+const hiragana = hiraganaObj;
+const katakana = katakanaObj;
+const semuaKata = [...verbsObj, ...nounsObj, ...adjObj, ...hiraganaObj, ...katakanaObj];
+
+function mapToObj(arr) {
+    return arr.map((item, i) => {
+        return {
+            id: i,
+            kanji: item[0],
+            romaji: item[1],
+            arti: item[2],
+            kategori: item[3],
+            contoh: item[4] || ""
+        };
+    });
+}
+`;
+            
+            const blob = new Blob([fileContent], {type: "text/javascript;charset=utf-8"});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = "data_baru.js";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+    </script>
+</body>
+</html>

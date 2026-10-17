@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Panduan bertahap belajar bahasa Jepang dasar dengan pola kalimat, contoh, dan latihan materi.">
+    <meta name="theme-color" content="#f8f7f4">
+    <title>Jalur Belajar Bahasa Jepang</title>
+    <style>
+        :root {
+            --primary: #1f2937;
+            --primary-light: #374151;
+            --accent: #f472b6;
+            --accent-soft: #fbcfe8;
+            --bg: #f8fafc;
+            --card: rgba(255,255,255,0.92);
+            --line: rgba(31,41,55,0.08);
+            --text: #111827;
+            --muted: #6b7280;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: Inter, Arial, sans-serif;
+            background: linear-gradient(135deg, #fdf2f8 0%, #eff6ff 40%, #f8fafc 100%);
+            color: var(--text);
+        }
+        .wrap {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px 80px;
+        }
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 16px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        h1 {
+            margin: 0;
+            font-size: clamp(2rem, 4vw, 3rem);
+        }
+        .subtitle {
+            color: var(--muted);
+            margin-top: 8px;
+            line-height: 1.6;
+        }
+        .back-link {
+            display: inline-block;
+            text-decoration: none;
+            background: var(--primary);
+            color: white;
+            padding: 10px 18px;
+            border-radius: 999px;
+            font-weight: 600;
+            box-shadow: 0 10px 24px rgba(17, 24, 39, 0.12);
+        }
+        .hero {
+            background: rgba(255,255,255,0.7);
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            padding: 24px;
+            margin-bottom: 28px;
+            box-shadow: 0 16px 32px rgba(31, 41, 55, 0.04);
+        }
+        .hero h2 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 1.4rem;
+        }
+        .hero p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+        .chapters {
+            display: grid;
+            gap: 24px;
+        }
+        .chapter-card {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 22px;
+            padding: 24px;
+            box-shadow: 0 16px 32px rgba(31, 41, 55, 0.05);
+        }
+        .chapter-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+        .chapter-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin: 0;
+        }
+        .chapter-tag {
+            background: var(--accent-soft);
+            color: #9d174d;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+        .info-box {
+            background: rgba(248,250,252,0.9);
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            padding: 18px;
+        }
+        .section-label {
+            margin: 0 0 10px;
+            color: var(--primary-light);
+            font-weight: 800;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            font-size: 0.72rem;
+        }
+        .info-box p, .info-box li {
+            margin: 0;
+            line-height: 1.8;
+            color: var(--text);
+        }
+        .info-box ul {
+            list-style: disc;
+            padding-left: 18px;
+            margin: 0;
+        }
+        .formula {
+            background: rgba(245,158,11,0.08);
+            border-left: 4px solid var(--warning);
+            border-radius: 10px;
+            padding: 10px 12px;
+            font-weight: 700;
+            color: #92400e;
+        }
+        .example {
+            background: rgba(16,185,129,0.06);
+            border-left: 4px solid var(--success);
+            border-radius: 10px;
+            padding: 10px 12px;
+            color: #065f46;
+            font-weight: 600;
+        }
+        @media (max-width: 760px) {
+            .detail-grid { grid-template-columns: 1fr; }
+            .topbar { align-items: flex-start; }
+        }
+
+        :root {
+            --primary: #202c3b;
+            --primary-light: #435166;
+            --accent: #c65368;
+            --accent-soft: #f9e8e9;
+            --bg: #f8f7f4;
+            --card: #fff;
+            --line: #e9e7e1;
+            --text: #202c3b;
+            --muted: #778293;
+        }
+        body {
+            background:
+                radial-gradient(ellipse at 8% 0%, rgba(243,202,205,.35), transparent 35rem),
+                radial-gradient(ellipse at 96% 12%, rgba(202,219,224,.38), transparent 34rem),
+                var(--bg);
+        }
+        .wrap { max-width: 1080px; padding-top: 32px; }
+        .topbar { align-items: center; margin-bottom: 28px; }
+        h1 { letter-spacing: -.045em; color: var(--primary); }
+        .subtitle { max-width: 670px; }
+        .back-link { border-radius: 13px; background: var(--primary); }
+        .hero, .chapter-card, .study-tools {
+            border-color: var(--line);
+            background: rgba(255,255,255,.88);
+            border-radius: 22px;
+            box-shadow: 0 14px 34px rgba(32,44,59,.05);
+        }
+        .hero { padding: 28px; }
+        .hero p { max-width: 780px; }
+        .study-tools { padding: 18px; margin-bottom: 24px; }
+        .study-tools label { display:block; color:var(--primary); font-weight:800; margin-bottom:8px; }
+        .study-tools-row { display:flex; gap:12px; align-items:center; }
+        #chapter-search {
+            width:100%;
+            min-height:48px;
+            padding:0 15px;
+            border:1px solid var(--line);
+            border-radius:13px;
+            color:var(--text);
+            background:#fff;
+            font:inherit;
+        }
+        #chapter-search:focus-visible { outline:3px solid rgba(198,83,104,.3); outline-offset:2px; }
+        #chapter-count { color:var(--muted); white-space:nowrap; font-size:.9rem; }
+        .chapters { gap:14px; }
+        .chapter-card { padding:0; overflow:hidden; }
+        .chapter-card[hidden] { display:none; }
+        .chapter-head {
+            list-style:none;
+            padding:20px 22px;
+            margin:0;
+            cursor:pointer;
+        }
+        .chapter-head::-webkit-details-marker { display:none; }
+        .chapter-title { color:var(--primary); }
+        .chapter-tag { background:var(--accent-soft); color:#8b3446; }
+        .chapter-toggle { color:var(--muted); font-size:.84rem; font-weight:600; }
+        .chapter-content { padding:0 22px 22px; }
+        .detail-grid { gap:12px; }
+        .info-box { background:#fbfaf8; border-color:var(--line); border-radius:15px; }
+        .section-label { color:var(--accent); }
+        .formula, .example { border-radius:11px; }
+        .example-romaji { margin:10px 0 4px !important; color:#526176 !important; font-style:italic; }
+        .example-translation { color:var(--muted) !important; font-size:.92rem; }
+        .example-speak {
+            margin-top:12px;
+            padding:9px 13px;
+            border:1px solid var(--line);
+            border-radius:11px;
+            color:var(--primary);
+            background:#fff;
+            font:600 .86rem Inter,Arial,sans-serif;
+            cursor:pointer;
+        }
+        .example-speak:hover { color:var(--accent); border-color:var(--accent); }
+        .example-speak:focus-visible { outline:3px solid rgba(198,83,104,.3); outline-offset:2px; }
+        @media (max-width: 600px) {
+            .wrap { padding:22px 14px 52px; }
+            .study-tools-row { align-items:stretch; flex-direction:column; }
+            #chapter-count { padding-left:2px; }
+            .chapter-head { padding:17px; }
+            .chapter-content { padding:0 17px 17px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="topbar">
+            <div>
+                <h1>Jalur Belajar Bahasa Jepang</h1>
+                <div class="subtitle">Ringkasan bertahap untuk memahami huruf, kosakata, dan pola kalimat dari dasar.</div>
+            </div>
+            <a class="back-link" href="index.html">Kembali ke ruang belajar</a>
+        </div>
+
+        <div class="hero">
+            <h2>Belajar dengan peta yang jelas</h2>
+            <p>
+                Pilih satu topik, pahami polanya, lalu baca contoh dengan suara keras. Gunakan pencarian untuk menemukan materi dengan cepat.
+                Halaman ini adalah panduan belajar ringkas, bukan pengganti buku teks atau urutan resmi suatu edisi Minna no Nihongo.
+            </p>
+        </div>
+
+        <section class="study-tools" aria-label="Cari materi">
+            <label for="chapter-search">Materi apa yang ingin kamu pelajari?</label>
+            <div class="study-tools-row">
+                <input id="chapter-search" type="search" placeholder="Cari topik, pola, atau kata kunci…" autocomplete="off">
+                <span id="chapter-count" role="status" aria-live="polite">Memuat materi…</span>
+            </div>
+        </section>
+
+        <div id="chapter-list" class="chapters"></div>
+    </div>
+
+    <script>
+        const minnaBabData = [
+            {
+                bab: 'Bab 0', judul: 'Pengantar dan dasar huruf',
+                arti: 'Bab ini mengajarkan huruf dasar Jepang agar kamu bisa membaca dan menulis kata sederhana.',
+                tujuan: 'Supaya kamu mulai familiar dengan hiragana dan katakana serta bisa menyapa orang dengan benar.',
+                penjelasan: 'Pada bab ini, fokusnya adalah mengenal huruf dulu. Kalau hurufnya sudah bisa dibaca, belajar kalimat berikutnya akan terasa lebih mudah.',
+                rumus: 'Hiragana/Katakana dasar + ungkapan perkenalan',
+                contoh: 'はじめまして。どうぞよろしくお願いします。',
+                materi: ['Huruf hiragana dasar', 'Huruf katakana dasar', 'Kalimat salam dan perkenalan']
+            },
+            {
+                bab: 'Bab 1', judul: 'Perkenalan diri',
+                arti: 'Bab ini membahas cara menyebut nama, asal, dan profesi dengan kalimat sederhana.',
+                tujuan: 'Agar kamu bisa memperkenalkan diri secara sopan di depan orang lain.',
+                penjelasan: 'Kalimat tipe “Saya adalah …” itu sangat penting karena sering dipakai di awal belajar bahasa Jepang. Coba ingat pola dasar: N wa N desu.',
+                rumus: 'N wa N desu',
+                contoh: 'わたしはがくせいです。',
+                materi: ['N wa N desu', 'Nama, profesi, asal', 'Kalimat sederhana']
+            },
+            {
+                bab: 'Bab 2', judul: 'Tanya jawab dasar',
+                arti: 'Bab ini mengajarkan cara bertanya dan menjawab pertanyaan dasar dalam bahasa Jepang.',
+                tujuan: 'Supaya kamu bisa bertanya seperti nama, tempat, dan hal umum tanpa merasa canggung.',
+                penjelasan: 'Kalimat tanya sering diawali kata seperti siapa, apa, di mana. Kalau kamu hafal kata tanya, percakapan akan terasa lebih lancar.',
+                rumus: 'N wa nani desu ka / Doko desu ka',
+                contoh: 'おなまえはなんですか。',
+                materi: ['Kata tanya', 'Pertanyaan umum', 'Jawaban singkat']
+            },
+            {
+                bab: 'Bab 3', judul: 'Waktu dan benda',
+                arti: 'Bab ini menjelaskan benda, tempat, dan waktu yang sering muncul dalam aktivitas sehari-hari.',
+                tujuan: 'Agar kamu bisa menyebut benda dan tempat di sekitar, serta menjelaskan waktu dengan lebih jelas.',
+                penjelasan: 'Di bab ini kamu belajar bahwa “ini/itu/di sana” sangat penting untuk menunjukkan benda atau tempat. Ini dasar untuk percakapan sehari-hari.',
+                rumus: 'これ / それ / あれ + は + N です; N は ここ / そこ / あそこ です',
+                contoh: 'トイレはどこですか。',
+                materi: ['これ・それ・あれ: kata tunjuk benda', 'ここ・そこ・あそこ: kata tunjuk tempat', 'N はどこですか: menanyakan lokasi']
+            },
+            {
+                bab: 'Bab 4', judul: 'Kata kerja dasar',
+                arti: 'Bab ini mengenalkan kata kerja yang sering dipakai dalam kegiatan harian.',
+                tujuan: 'Supaya kamu bisa menyampaikan apa yang sedang atau biasa kamu lakukan.',
+                penjelasan: 'Kata kerja adalah inti dalam kalimat. Kalau kamu sudah hafal verba dasar, kamu bisa membuat banyak kalimat dengan mudah.',
+                rumus: 'Waktu に + tempat へ + alat で + objek を + Vます',
+                contoh: 'わたしはまいにちにほんごをべんきょうします。',
+                materi: ['Bentuk sopan -ます untuk kebiasaan/fakta', 'を menandai objek langsung', 'に untuk waktu tertentu']
+            },
+            {
+                bab: 'Bab 5', judul: 'Kalimat negatif',
+                arti: 'Bab ini menjelaskan cara menyatakan “tidak”, “bukan”, atau “tidak melakukan”.',
+                tujuan: 'Agar kamu bisa menolak, menegaskan, atau menjelaskan sesuatu yang tidak terjadi.',
+                penjelasan: 'Kalimat negatif sangat penting supaya kamu tidak hanya bisa berkata “ya”, tapi juga bisa berkata “tidak” dengan benar dan sopan.',
+                rumus: 'N は N じゃありません; Vます → Vません',
+                contoh: 'わたしはがくせいじゃありません。',
+                materi: ['じゃありません: bukan (gaya percakapan sopan)', 'ではありません: bentuk lebih formal', 'Verba -ます → -ません: tidak melakukan']
+            },
+            {
+                bab: 'Bab 6', judul: 'Kata tunjuk dan tempat',
+                arti: 'Bab ini menjelaskan kata ini, itu, dan sana serta cara menunjukkan benda dan lokasi.',
+                tujuan: 'Supaya kamu bisa menunjukkan benda atau tempat dengan jelas di percakapan.',
+                penjelasan: 'Kata tunjuk seperti kore, sore, are sering dipakai saat menunjuk benda. Ini dasar untuk bertanya dan menjelaskan tempat.',
+                rumus: 'これ・それ・あれ + は + N です; この・その・あの + N',
+                contoh: 'このほんはわたしのです。',
+                materi: ['これ・それ・あれ berdiri sendiri sebagai kata benda', 'この・その・あの harus langsung diikuti kata benda', 'ここ・そこ・あそこ digunakan untuk tempat']
+            },
+            {
+                bab: 'Bab 7', judul: 'Jumlah dan harga',
+                arti: 'Bab ini membahas angka, jumlah, dan harga barang sederhana.',
+                tujuan: 'Agar kamu bisa menghitung benda dan bertanya harga saat belanja.',
+                penjelasan: 'Banyak percakapan sehari-hari memakai hitungan, angka, dan harga. Bab ini membantu kamu berbelanja dan bertanya dengan lebih aman.',
+                rumus: 'N は いくらですか; N は [angka] 円です',
+                contoh: 'このかさは二千円です。',
+                materi: ['Angka', 'Hitungan benda', 'Harga']
+            },
+            {
+                bab: 'Bab 8', judul: 'Waktu dan jadwal',
+                arti: 'Bab ini membahas jam, hari, dan jadwal kegiatanmu.',
+                tujuan: 'Supaya kamu bisa menyampaikan jadwal, waktu, dan rencana kegiatan dengan benar.',
+                penjelasan: 'Waktu adalah bagian penting dalam percakapan. Kamu akan sering bilang jam berapa, hari apa, dan kapan kegiatan terjadi.',
+                rumus: 'N時に + Vます; hari + に + Vます',
+                contoh: 'げつようびにがっこうへいきます。',
+                materi: ['Hari', 'Bulan', 'Jam']
+            },
+            {
+                bab: 'Bab 9', judul: 'Aktivitas sehari-hari',
+                arti: 'Bab ini mengajarkan kegiatan yang biasa kamu lakukan setiap hari.',
+                tujuan: 'Agar kamu bisa menceritakan rutinitas harian dengan bahasa Jepang.',
+                penjelasan: 'Coba bayangkan aktivitasmu setiap pagi, siang, atau malam. Banyak kalimat sehari-hari dibuat dari pola kegiatan yang sederhana ini.',
+                rumus: 'Rutinitas: Vます; sedang berlangsung: Vて います',
+                contoh: 'あさごはんをたべます。',
+                materi: ['Kegiatan rutin', 'Kegiatan sedang berlangsung', 'Waktu aktivitas']
+            },
+            {
+                bab: 'Bab 10', judul: 'Kata sifat i',
+                arti: 'Bab ini menjelaskan kata sifat yang menggambarkan keadaan atau ciri sesuatu.',
+                tujuan: 'Supaya kamu bisa mendeskripsikan benda, orang, atau tempat dengan lebih hidup.',
+                penjelasan: 'Kata sifat itu berguna untuk bilang “tinggi”, “besar”, “kecil”, “hangat”, dan semacamnya. Ini membuat kalimat lebih menarik.',
+                rumus: 'N wa Adj-i desu',
+                contoh: 'このりんごはおいしいです。',
+                materi: ['Kata sifat i', 'Deskripsi benda', 'Mendeskripsikan keadaan']
+            },
+            {
+                bab: 'Bab 11', judul: 'Kata sifat na',
+                arti: 'Bab ini mengenalkan kata sifat na yang dapat dipakai untuk membuat deskripsi.',
+                tujuan: 'Agar kamu bisa menjelaskan keadaan atau karakter dengan pola yang tepat.',
+                penjelasan: 'Kata sifat な seperti にぎやか menjadi にぎやかな町 sebelum kata benda; sebelum です, な dihilangkan: 町はにぎやかです. むずかしい adalah kata sifat い, bukan な.',
+                rumus: 'N wa Adj-na desu',
+                contoh: 'とうきょうはにぎやかです。',
+                materi: ['Kata sifat na', 'Deskripsi keadaan', 'Penyambung kata sifat']
+            },
+            {
+                bab: 'Bab 12', judul: 'Kalimat majemuk',
+                arti: 'Bab ini mengajarkan cara menggabungkan dua ide menjadi satu kalimat.',
+                tujuan: 'Supaya kamu bisa menyebutkan dua kegiatan atau dua kondisi dalam satu kalimat.',
+                penjelasan: 'Gunakan Vて untuk menghubungkan kegiatan dalam urutan. Partikel と menghubungkan kata benda atau menandai teman melakukan sesuatu bersama.',
+                rumus: 'Vて、V; N1 と N2 (と = bersama/dan benda)',
+                contoh: 'ともだちとえいがをみます。',
+                materi: ['Penggabungan kalimat', 'Partikel to', 'Hubungan dua ide']
+            },
+            {
+                bab: 'Bab 13', judul: 'Bentuk lampau',
+                arti: 'Bab ini menjelaskan cara menyatakan kejadian yang sudah terjadi.',
+                tujuan: 'Agar kamu bisa menceritakan kegiatan masa lalu dengan benar.',
+                penjelasan: 'Untuk bentuk sopan gunakan -ました (lampau) dan -ませんでした (lampau negatif). Bentuk biasa lampau berakhir -た atau -だ; perubahannya bergantung pada kelompok kata kerja.',
+                rumus: 'Vます → Vました / Vませんでした; bentuk biasa → Vた / Vだ',
+                contoh: 'きのう本を読みました。',
+                materi: ['Bentuk lampau', 'Kehadiran masa lalu', 'Cerita sederhana']
+            },
+            {
+                bab: 'Bab 14', judul: 'Pengalaman',
+                arti: 'Bab ini membahas pengalaman masa lalu dan sesuatu yang pernah kamu lakukan.',
+                tujuan: 'Supaya kamu bisa menceritakan pengalaman pribadi dengan bahasa yang tepat.',
+                penjelasan: 'Pola “pernah melakukan” sering dipakai untuk cerita pengalaman. Ini ibarat kamu bilang, “Saya pernah ke Jepang.”',
+                rumus: 'V-たことがあります',
+                contoh: 'にほんへいったことがあります。',
+                materi: ['Pengalaman', 'Pernah melakukan', 'Cerita pribadi']
+            },
+            {
+                bab: 'Bab 15',                 judul: 'Saran, keinginan, dan permintaan',
+                arti: 'Bab ini mengajarkan cara meminta sesuatu, meminta bantuan, dan menyatakan keinginan.',
+                tujuan: 'Agar kamu bisa menyampaikan kebutuhan dan permintaan dengan lebih halus.',
+                penjelasan: 'Saat meminta bantuan, kamu biasanya pakai kata yang lembut. Ini membuat orang lain lebih nyaman menerima permintaanmu.',
+                rumus: 'N をください; Vてください; Vます → Vたいです',
+                contoh: 'ちょっとまってください。',
+                materi: ['Nをください: meminta benda', 'Vてください: meminta seseorang melakukan sesuatu', 'Vたいです: menyatakan keinginan sendiri']
+            },
+            {
+                bab: 'Bab 16', judul: 'Keinginan dan saran',
+                arti: 'Bab ini membahas cara menyatakan keinginan dan menyarankan sesuatu.',
+                tujuan: 'Supaya kamu bisa menyatakan hal yang ingin dilakukan serta mengajak seseorang melakukan sesuatu.',
+                penjelasan: 'Vたいです menyatakan keinginan pembicara. Vましょう dapat mengajak atau mengusulkan kegiatan bersama; konteks menentukan nuansanya.',
+                rumus: 'Vます tanpa ます + たいです; Vます → Vましょう (ajakan)',
+                contoh: 'すしをたべたいです。',
+                materi: ['Vます tanpa ます + たいです: ingin melakukan', 'Vましょう: mari/kita lakukan', 'Vませんか: ajakan berbentuk pertanyaan']
+            },
+            {
+                bab: 'Bab 17', judul: 'Larangan dan kewajiban',
+                arti: 'Bab ini menjelaskan aturan, larangan, dan kewajiban dalam kehidupan sehari-hari.',
+                tujuan: 'Agar kamu bisa menyampaikan apa yang tidak boleh dan harus dilakukan dengan benar.',
+                penjelasan: 'Kalimat larangan dan kewajiban sering dijumpai di sekolah, tempat umum, atau aturan rumah. Ini membuat bahasa Jepang lebih praktis.',
+                rumus: 'V-te wa ikemasen / V-nakereba narimasen',
+                contoh: 'ここでたばこをすってはいけません。',
+                materi: ['Larangan', 'Kewajiban', 'Aturan']
+            },
+            {
+                bab: 'Bab 18', judul: 'Kemampuan dan hobi',
+                arti: 'Bab ini mengajarkan cara menyatakan kemampuan dan menjelaskan hobi.',
+                tujuan: 'Agar kamu bisa mengatakan hal yang mampu dilakukan serta kegiatan yang menjadi hobi.',
+                penjelasan: 'Kata kerja bentuk kamus + ことができます berarti mampu melakukan sesuatu. Pola ini berbeda dari kalimat pasif.',
+                rumus: 'V bentuk kamus + ことができます; 趣味は V bentuk kamus + ことです',
+                contoh: 'わたしはにほんごをはなすことができます。',
+                materi: ['Bentuk kamus (辞書形)', 'Vことができます: dapat/mampu melakukan', 'Hobi dengan 趣味はVことです']
+            },
+            {
+                bab: 'Bab 19', judul: 'Pengalaman dan kebiasaan',
+                arti: 'Bab ini membahas hal yang pernah dilakukan, kebiasaan, dan perubahan keadaan.',
+                tujuan: 'Agar kamu bisa menceritakan pengalaman dan menggambarkan perubahan atau kebiasaan.',
+                penjelasan: 'Vたことがあります menyatakan pengalaman “pernah”. VたりVたりします memberi contoh beberapa kegiatan; daftar tersebut tidak harus lengkap.',
+                rumus: 'Vたことがあります; Vたり、Vたりします; い-adj → くなります / な-adj & N → になります',
+                contoh: 'やすみの日は本を読んだり、映画を見たりします。',
+                materi: ['Pernah: Vたことがあります', 'Contoh kegiatan: Vたり、Vたりします', 'Perubahan keadaan: い-adj → くなります; な-adj/N → になります']
+            },
+            {
+                bab: 'Bab 20', judul: 'Sebab dan alasan',
+                arti: 'Bab ini menjelaskan cara menyampaikan alasan dan sebab dari suatu tindakan.',
+                tujuan: 'Agar kamu bisa menjawab “mengapa?” dengan jelas dan natural.',
+                penjelasan: 'Kalimat alasan memberitahu kenapa seseorang melakukan sesuatu. Ini sangat sering dipakai dalam percakapan sehari-hari.',
+                rumus: 'Sebab + から + hasil; N / な-adj + だから',
+                contoh: 'たくさん働いたから、休みます。',
+                materi: ['Alasan', 'Sebab', 'Keterangan sebab']
+            },
+            {
+                bab: 'Bab 21', judul: 'Urutan waktu',
+                arti: 'Bab ini membahas urutan kegiatan sebelum dan sesudah suatu tindakan.',
+                tujuan: 'Agar kamu bisa menjelaskan langkah-langkah atau urutan aktivitas dengan rapi.',
+                penjelasan: 'Kalimat urutan ada untuk menjelaskan “setelah ini …” atau “sebelum …”. Ini membantu saat memberi instruksi atau cerita.',
+                rumus: 'Vてから + aksi berikutnya; V bentuk kamus / Vない + 前に',
+                contoh: 'てをあらってからごはんをたべます。',
+                materi: ['Sebelum', 'Sesudah', 'Urutan kegiatan']
+            },
+            {
+                bab: 'Bab 22', judul: 'Klausa relatif',
+                arti: 'Bab ini mengajarkan cara menjelaskan benda atau hal dengan kalimat yang lebih lengkap.',
+                tujuan: 'Supaya kamu bisa membuat frasa penjelas yang lebih natural untuk benda dan situasi.',
+                penjelasan: 'Klausa relatif berguna untuk menjelaskan objek dengan detail, misalnya “buku yang saya beli kemarin”. Ini membantu kalimatmu terdengar lebih lengkap.',
+                rumus: 'Klausa penjelas bentuk biasa + N',
+                contoh: 'きのう買った本を読みました。',
+                materi: ['Frasa penjelas', 'Kata benda dan klausa', 'Mendeskripsikan benda']
+            },
+            {
+                bab: 'Bab 23', judul: 'Kondisi waktu',
+                arti: 'Bab ini membahas kapan sesuatu terjadi dan bagaimana keadaan berubah.',
+                tujuan: 'Agar kamu bisa menjelaskan saat kondisi berubah atau terjadi sesuatu dalam waktu tertentu.',
+                penjelasan: 'Kata seperti saat, ketika, dan saat kondisi berubah sering dipakai untuk menjelaskan hubungan waktu antar kejadian.',
+                rumus: 'V bentuk kamus / Vた + とき; klausa biasa + と (akibat otomatis)',
+                contoh: 'はるになるとあたたかくなります。',
+                materi: ['Kata waktu', 'Kondisi', 'Perubahan']
+            },
+            {
+                bab: 'Bab 24', judul: 'Memberi dan menerima',
+                arti: 'Bab ini mengajarkan ungkapan memberi, menerima, dan menerima bantuan dari orang lain.',
+                tujuan: 'Agar kamu bisa mengekspresikan bantuan dan pemberian dengan sopan.',
+                penjelasan: 'Pola ini sering dipakai saat seseorang membantu atau memberi sesuatu. Ini bagian penting dari hubungan sosial dalam bahasa Jepang.',
+                rumus: 'V-te kureru / V-te morau',
+                contoh: 'ともだちがてつだってくれました。',
+                materi: ['Memberi', 'Menerima', 'Bantuan']
+            },
+            {
+                bab: 'Bab 25', judul: 'Kesimpulan dan aplikasi',
+                arti: 'Bab ini menutup materi dengan kombinasi semua pola di atas dalam satu kalimat nyata.',
+                tujuan: 'Agar kamu bisa menggabungkan pola dasar untuk membuat percakapan yang lebih lengkap dan natural.',
+                penjelasan: 'Pada tahap ini, kamu sudah mempelajari banyak pola dasar. Kuncinya adalah menggabungkan pola-pola itu sambil sering berlatih soal dan percakapan.',
+                rumus: 'Vたら / Adjかったら / Nだったら + hasil',
+                contoh: '雨が降ったら、うちで勉強します。',
+                materi: ['Review seluruh bab', 'Menyusun kalimat utuh', 'Aplikasi percakapan']
+            }
+        ];
+
+        const chapterList = document.getElementById('chapter-list');
+        const exampleNotes = [
+            ['Hajimemashite. Douzo yoroshiku onegaishimasu.', 'Perkenalkan. Mohon bantuannya / senang berkenalan dengan Anda.'],
+            ['Watashi wa gakusei desu.', 'Saya seorang pelajar.'],
+            ['Onamae wa nan desu ka.', 'Siapa nama Anda?'],
+            ['Toire wa doko desu ka.', 'Toilet ada di mana?'],
+            ['Watashi wa mainichi nihongo o benkyou shimasu.', 'Saya belajar bahasa Jepang setiap hari.'],
+            ['Watashi wa gakusei ja arimasen.', 'Saya bukan pelajar.'],
+            ['Kono hon wa watashi no desu.', 'Buku ini milik saya.'],
+            ['Kono kasa wa nisen en desu.', 'Payung ini harganya 2.000 yen.'],
+            ['Getsuyoubi ni gakkou e ikimasu.', 'Saya pergi ke sekolah pada hari Senin.'],
+            ['Asagohan o tabemasu.', 'Saya makan sarapan.'],
+            ['Kono ringo wa oishii desu.', 'Apel ini enak.'],
+            ['Toukyou wa nigiyaka desu.', 'Tokyo ramai.'],
+            ['Tomodachi to eiga o mimasu.', 'Saya menonton film bersama teman.'],
+            ['Kinou hon o yomimashita.', 'Kemarin saya membaca buku.'],
+            ['Nihon e itta koto ga arimasu.', 'Saya pernah pergi ke Jepang.'],
+            ['Chotto matte kudasai.', 'Tolong tunggu sebentar.'],
+            ['Sushi o tabetai desu.', 'Saya ingin makan sushi.'],
+            ['Koko de tabako o sutte wa ikemasen.', 'Dilarang merokok di sini.'],
+            ['Watashi wa nihongo o hanasu koto ga dekimasu.', 'Saya bisa berbicara bahasa Jepang.'],
+            ['Yasumi no hi wa hon o yondari, eiga o mitari shimasu.', 'Pada hari libur, saya melakukan hal-hal seperti membaca buku dan menonton film.'],
+            ['Takusan hataraita kara, yasumimasu.', 'Karena sudah banyak bekerja, saya akan beristirahat.'],
+            ['Te o aratte kara, gohan o tabemasu.', 'Setelah mencuci tangan, saya makan.'],
+            ['Kinou katta hon o yomimashita.', 'Saya membaca buku yang saya beli kemarin.'],
+            ['Haru ni naru to atatakaku narimasu.', 'Saat musim semi tiba, cuaca menjadi hangat.'],
+            ['Tomodachi ga tetsudatte kuremashita.', 'Teman membantu saya.'],
+            ['Ame ga futtara, uchi de benkyou shimasu.', 'Kalau hujan, saya akan belajar di rumah.']
+        ];
+
+        minnaBabData.forEach((item, index) => {
+            const card = document.createElement('details');
+            card.className = 'chapter-card';
+            card.id = `tahap-${index}`;
+            if (index === 0) card.open = true;
+
+            const listHtml = item.materi.map((point) => `<li>${point}</li>`).join('');
+
+            card.innerHTML = `
+                <summary class="chapter-head">
+                    <h3 class="chapter-title">Tahap ${index}: ${item.judul}</h3>
+                    <span class="chapter-tag">Topik ${index + 1}</span>
+                    <span class="chapter-toggle">Klik untuk ${index === 0 ? 'menutup' : 'mempelajari'} ▾</span>
+                </summary>
+                <div class="chapter-content"><div class="detail-grid">
+                    <div class="info-box">
+                        <p class="section-label">Arti</p>
+                        <p>${item.arti}</p>
+                    </div>
+                    <div class="info-box">
+                        <p class="section-label">Tujuan</p>
+                        <p>${item.tujuan}</p>
+                    </div>
+                    <div class="info-box">
+                        <p class="section-label">Penjelasan mudah</p>
+                        <p>${item.penjelasan}</p>
+                    </div>
+                    <div class="info-box">
+                        <p class="section-label">Rumus</p>
+                        <div class="formula">${item.rumus}</div>
+                    </div>
+                    <div class="info-box">
+                        <p class="section-label">Contoh</p>
+                        <div class="example">${item.contoh}</div>
+                        <p class="example-romaji">${exampleNotes[index][0]}</p>
+                        <p class="example-translation">${exampleNotes[index][1]}</p>
+                    </div>
+                    <div class="info-box" style="grid-column: 1 / -1;">
+                        <p class="section-label">Pembahasan materi</p>
+                        <ul>${listHtml}</ul>
+                    </div>
+                </div></div>
+            `;
+
+            chapterList.appendChild(card);
+            const speakButton = document.createElement('button');
+            speakButton.type = 'button';
+            speakButton.className = 'example-speak';
+            speakButton.textContent = '▶ Dengarkan contoh';
+            speakButton.disabled = !('speechSynthesis' in window);
+            speakButton.setAttribute('aria-label', `Dengarkan contoh bahasa Jepang: ${item.contoh}`);
+            speakButton.addEventListener('click', () => {
+                const utterance = new SpeechSynthesisUtterance(item.contoh.replace(/\n/g, ' '));
+                utterance.lang = 'ja-JP';
+                utterance.rate = 0.85;
+                window.speechSynthesis.cancel();
+                window.speechSynthesis.speak(utterance);
+            });
+            card.querySelector('.example').after(speakButton);
+        });
+
+        const minnaReadings = new Map([
+            ['二千円', 'にせんえん'], ['辞書形', 'じしょけい'], ['趣味', 'しゅみ'], ['映画', 'えいが'],
+            ['勉強', 'べんきょう'], ['お願いします', 'おねがいします'], ['読みました', 'よみました'],
+            ['読む', 'よむ'], ['読んだり', 'よんだり'], ['見たり', 'みたり'], ['働いた', 'はたらいた'],
+            ['休み', 'やすみ'], ['前に', 'まえに'], ['買った', 'かった'], ['雨', 'あめ'], ['降ったら', 'ふったら'],
+            ['小さな', 'ちいさな'], ['町', 'まち'], ['時', 'じ'], ['円', 'えん'], ['日', 'ひ'], ['本', 'ほん']
+        ]);
+        const minnaSingleReadings = new Map([
+            ['辞', 'じ'], ['書', 'しょ'], ['形', 'けい'], ['趣', 'しゅ'], ['味', 'み'], ['映', 'えい'], ['画', 'が'],
+            ['勉', 'べん'], ['強', 'きょう'], ['願', 'ねが'], ['読', 'よ'], ['見', 'み'], ['働', 'はたら'],
+            ['休', 'やす'], ['前', 'まえ'], ['買', 'か'], ['雨', 'あめ'], ['降', 'ふ'], ['小', 'ちい'],
+            ['町', 'まち'], ['時', 'じ'], ['円', 'えん'], ['日', 'ひ'], ['本', 'ほん']
+        ]);
+        const escapeHtml = (text) => text.replace(/[&<>"]/g, (char) => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'
+        }[char]));
+        const formatReading = (word, reading) => {
+            const pieces = word.match(/[一-龯]+|[^一-龯]+/g) || [word];
+            if (pieces.length === 1) return `<ruby>${word}<rt>${reading}</rt></ruby>`;
+            let cursor = 0;
+            return pieces.map((piece, index) => {
+                if (!/[一-龯]/.test(piece)) {
+                    if (reading.startsWith(piece, cursor)) cursor += piece.length;
+                    return piece;
+                }
+                const nextKana = pieces[index + 1] && !/[一-龯]/.test(pieces[index + 1]) ? pieces[index + 1] : '';
+                const nextIndex = nextKana ? reading.indexOf(nextKana, cursor) : reading.length;
+                if (nextIndex <= cursor) return piece;
+                const part = `<ruby>${piece}<rt>${reading.slice(cursor, nextIndex)}</rt></ruby>`;
+                cursor = nextIndex;
+                return part;
+            }).join('');
+        };
+        const decorateJapanese = (text) => {
+            const tokens = [];
+            let result = escapeHtml(text);
+            [...minnaReadings.keys()].sort((a, b) => b.length - a.length).forEach((word) => {
+                const pattern = new RegExp(word, 'g');
+                result = result.replace(pattern, (match) => {
+                    const token = `__MINNA_RUBY_${tokens.length}__`;
+                    tokens.push(formatReading(match, minnaReadings.get(match)));
+                    return token;
+                });
+            });
+            result = result.replace(/[一-龯]/g, (kanji) => {
+                const reading = minnaSingleReadings.get(kanji);
+                if (!reading) return kanji;
+                const token = `__MINNA_RUBY_${tokens.length}__`;
+                tokens.push(`<ruby>${kanji}<rt>${reading}</rt></ruby>`);
+                return token;
+            });
+            return tokens.reduce((html, ruby, index) => html.replace(`__MINNA_RUBY_${index}__`, ruby), result);
+        };
+        const chapterTextWalker = document.createTreeWalker(chapterList, NodeFilter.SHOW_TEXT);
+        const chapterTextNodes = [];
+        let chapterTextNode;
+        while ((chapterTextNode = chapterTextWalker.nextNode())) {
+            if (!chapterTextNode.parentElement?.closest('ruby')) chapterTextNodes.push(chapterTextNode);
+        }
+        chapterTextNodes.forEach((textNode) => {
+            const replacement = document.createElement('span');
+            replacement.innerHTML = decorateJapanese(textNode.textContent || '');
+            textNode.replaceWith(...replacement.childNodes);
+        });
+
+        const chapterSearch = document.getElementById('chapter-search');
+        const chapterCount = document.getElementById('chapter-count');
+        chapterSearch.addEventListener('input', () => {
+            const query = chapterSearch.value.trim().toLocaleLowerCase();
+            let visibleCount = 0;
+            document.querySelectorAll('.chapter-card').forEach((card) => {
+                const matches = card.textContent.toLocaleLowerCase().includes(query);
+                card.hidden = !matches;
+                if (matches) visibleCount++;
+            });
+            chapterCount.textContent = `${visibleCount} dari ${minnaBabData.length} topik`;
+        });
+        chapterCount.textContent = `${minnaBabData.length} topik belajar`;
+    </script>
+</body>
+</html>

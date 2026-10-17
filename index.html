@@ -1,0 +1,1855 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Belajar bahasa Jepang dari dasar melalui flashcard, kuis kosakata, kana, kanji N5, dan materi Minna no Nihongo.">
+    <meta name="theme-color" content="#f8f7f4">
+    <title>Nihongo Studio — Belajar Bahasa Jepang</title>
+    <!-- Google Fonts for Modern Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Variables for Premium Theme */
+        html { overflow-x: clip; }
+
+        :root {
+            --primary: #2d3748;
+            --primary-light: #4a5568;
+            --accent: #ff8fab; /* Sakura Dark */
+            --accent-light: #ffb7c5; /* Sakura */
+            --bg-gradient: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            --card-bg: rgba(255, 255, 255, 0.7);
+            --card-border: rgba(255, 255, 255, 0.4);
+            --text-dark: #1a202c;
+            --text-muted: #718096;
+            --white: #ffffff;
+            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            padding: 1rem;
+        }
+
+        /* Animated Background Elements */
+        .bg-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-light), #fff);
+            filter: blur(40px);
+            z-index: -1;
+            animation: float 10s infinite ease-in-out alternate;
+        }
+
+        .bg-circle-1 {
+            width: 300px;
+            height: 300px;
+            top: -100px;
+            left: -100px;
+        }
+
+        .bg-circle-2 {
+            width: 400px;
+            height: 400px;
+            bottom: -150px;
+            right: -100px;
+            background: linear-gradient(135deg, #a0aec0, #fff);
+            animation-delay: 2s;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) scale(1); }
+            100% { transform: translateY(30px) scale(1.1); }
+        }
+
+        /* Main Container - Glassmorphism */
+        .app-container {
+            width: 100%;
+            max-width: 650px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Filter Tabs */
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 0.5rem;
+            border-radius: 50px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            border: 1px solid var(--card-border);
+        }
+        
+        .filter-btn {
+            background: transparent;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn:hover {
+            color: var(--primary);
+            background: rgba(255,255,255,0.8);
+        }
+        
+        .filter-btn.active {
+            background: var(--primary);
+            color: var(--white);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .progress-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--primary-light);
+            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            max-width: 300px;
+            height: 6px;
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--accent);
+            width: 1%;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 4px;
+        }
+
+        /* Flashcard Scene (3D Perspective) */
+        .scene {
+            width: 100%;
+            height: 380px;
+            perspective: 1000px;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+
+        .card.is-flipped {
+            transform: rotateY(180deg);
+        }
+
+        /* Card Faces - Glassmorphism */
+        .card__face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2.5rem;
+            border-radius: 24px;
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border);
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .card__face--front {
+            background: rgba(255, 255, 255, 0.85);
+        }
+
+        .card__face--back {
+            transform: rotateY(180deg);
+            background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(255,255,255,0.8));
+        }
+
+        /* Typography inside cards */
+        .kana-text {
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .back-kana {
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.2rem;
+        }
+
+        .romaji-text {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+
+        .meaning-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+        }
+
+        .category-badge {
+            background: var(--primary-light);
+            color: var(--white);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .detail-box {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 0.8rem 1rem;
+            border-radius: 12px;
+            font-size: 0.82rem;
+            line-height: 1.5;
+            color: var(--primary);
+            border-left: 4px solid var(--accent);
+            margin-bottom: 0.75rem;
+            text-align: left;
+        }
+
+        .example-box {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.03);
+            padding: 1rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--primary);
+            font-family: 'Noto Sans JP', 'Inter', sans-serif;
+            border-left: 4px solid var(--accent-light);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.2rem;
+            width: 100%;
+        }
+
+        .btn {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            color: var(--primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            padding: 0.8rem 1.8rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            outline: none;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            background: #fff;
+            color: var(--accent);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-icon {
+            padding: 1rem;
+            border-radius: 50%;
+            width: 54px;
+            height: 54px;
+        }
+        
+        .btn-icon svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        /* Helper for flipping text instruction */
+        .flip-hint {
+            position: absolute;
+            bottom: 1.5rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            opacity: 0.7;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+
+        /* Card transition animation */
+        .card-change-enter {
+            animation: slideInRight 0.4s forwards;
+        }
+        .card-change-enter-prev {
+            animation: slideInLeft 0.4s forwards;
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideInLeft {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* -------------------------------------
+           QUIZ MODE STYLES 
+           ------------------------------------- */
+        .mode-quiz .card {
+            cursor: default; /* Disable pointer cursor on card in quiz mode */
+        }
+        
+        .mode-quiz .card__face--back {
+            display: none !important; /* Hide back face completely */
+        }
+
+        .mode-quiz .flip-hint {
+            display: none; /* Hide flip hint */
+        }
+
+        .mode-quiz #card-front-romaji {
+            display: none; /* Hide romaji clue on front */
+        }
+
+        .mode-quiz #quiz-input-container {
+            display: flex; /* Show input box */
+        }
+
+        .mode-quiz .btn-prev {
+            display: none; /* Hide previous button */
+        }
+        
+        .mode-quiz .btn-shuffle {
+            display: none; /* Hide shuffle button during quiz to enforce order */
+        }
+
+        #quiz-input-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .quiz-input {
+            padding: 12px 20px;
+            font-size: 1.2rem;
+            font-family: 'Inter', sans-serif;
+            border: 2px solid var(--card-border);
+            border-radius: 12px;
+            width: 80%;
+            text-align: center;
+            outline: none;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            transition: all 0.3s;
+        }
+
+        .quiz-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(255, 143, 171, 0.2);
+        }
+
+        /* Virtual Keyboard */
+        #virtual-keyboard-container {
+            display: none;
+            width: 100%;
+            margin-top: 1rem;
+            background: rgba(255,255,255,0.4);
+            padding: 1rem;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--card-border);
+        }
+        
+        .vk-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.8rem;
+        }
+        
+        .vk-keys {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 5px;
+        }
+        
+        .vk-key {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 8px 0;
+            font-size: 1.2rem;
+            font-weight: bold;
+            font-family: 'Noto Sans JP', sans-serif;
+            color: var(--primary);
+            cursor: pointer;
+            transition: all 0.1s;
+        }
+        
+        .vk-key:active {
+            background: var(--accent-light);
+            color: #fff;
+            transform: scale(0.95);
+        }
+        
+        .vk-action {
+            background: var(--primary-light);
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        /* Result Screen */
+        .result-screen {
+            display: none;
+            width: 100%;
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            border-radius: 24px;
+            padding: 2.5rem 2rem;
+            border: 1px solid var(--card-border);
+            box-shadow: var(--shadow);
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .result-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        .result-score {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+        }
+        .result-list {
+            max-height: 250px;
+            overflow-y: auto;
+            text-align: left;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: rgba(255,255,255,0.6);
+            border-radius: 12px;
+        }
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 15px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            font-size: 0.95rem;
+        }
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        .result-item .kana {
+            font-weight: 700;
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 1.2rem;
+            width: 40px;
+        }
+        .ans-correct { color: #38a169; font-weight: bold; }
+        .ans-incorrect { color: #e53e3e; font-weight: bold; }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .app-container {
+                padding: 1rem;
+            }
+            .scene {
+                height: 400px;
+            }
+            .kana-text {
+                font-size: 3.5rem;
+            }
+            .header h1 {
+                font-size: 1.6rem;
+            }
+            .filter-btn {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.75rem;
+            }
+            .btn {
+                padding: 0.8rem 1.2rem;
+                font-size: 0.85rem;
+            }
+            .btn-icon {
+                width: 48px;
+                height: 48px;
+                padding: 0.7rem;
+            }
+        }
+
+        /* Study dashboard */
+        :root {
+            --primary: #202c3b;
+            --primary-light: #435166;
+            --accent: #c65368;
+            --accent-light: #f2a4ad;
+            --text-dark: #202c3b;
+            --text-muted: #778293;
+            --bg-gradient: #f8f7f4;
+            --card-bg: rgba(255, 255, 255, 0.96);
+            --card-border: #e9e7e1;
+            --shadow: 0 18px 48px rgba(40, 48, 60, 0.09);
+        }
+
+        body {
+            justify-content: flex-start;
+            padding: 36px 24px 64px;
+            background:
+                radial-gradient(ellipse at 10% 0%, rgba(243, 202, 205, 0.42), transparent 36rem),
+                radial-gradient(ellipse at 94% 18%, rgba(202, 219, 224, 0.42), transparent 34rem),
+                #f8f7f4;
+        }
+
+        .bg-circle { position:fixed; opacity: 0.24; }
+        .app-container { max-width: 1080px; padding: 0; align-items: stretch; }
+        .header { text-align: left; margin-bottom: 24px; animation: none; }
+        .header h1 { font-size: clamp(1.8rem, 4vw, 2.65rem); letter-spacing: -1.4px; }
+        .header p { max-width: 660px; line-height: 1.7; }
+        .eyebrow {
+            color: var(--accent);
+            font-size: .76rem;
+            font-weight: 800;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        .top-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 38px;
+        }
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: -.03em;
+        }
+        .brand-mark {
+            display: grid;
+            place-items: center;
+            width: 42px;
+            height: 42px;
+            border-radius: 14px;
+            color: #fff;
+            background: var(--primary);
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 1.3rem;
+        }
+        .top-nav a, .lesson-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .top-nav a { padding: 10px 15px; border: 1px solid var(--card-border); border-radius: 999px; background: #fff; }
+        .top-nav a:hover, .lesson-link:hover { color: var(--accent); }
+        .welcome-panel {
+            display: grid;
+            grid-template-columns: minmax(0, 1.45fr) minmax(220px, .7fr);
+            gap: 28px;
+            align-items: center;
+            padding: clamp(24px, 5vw, 42px);
+            margin-bottom: 22px;
+            overflow: hidden;
+            border-radius: 26px;
+            color: #fff;
+            background: linear-gradient(120deg, #253448, #3b4b5d 70%, #5d6170);
+            box-shadow: 0 22px 48px rgba(32, 44, 59, .16);
+        }
+        .welcome-panel h2 { font-size: clamp(1.55rem, 3.5vw, 2.35rem); line-height: 1.2; letter-spacing: -.045em; margin: 0 0 12px; }
+        .welcome-panel p { color: rgba(255,255,255,.78); line-height: 1.7; max-width: 590px; margin: 0; }
+        .welcome-panel .eyebrow { color: #ffc3ca; }
+        .welcome-aside {
+            padding: 22px;
+            border: 1px solid rgba(255,255,255,.17);
+            border-radius: 20px;
+            background: rgba(255,255,255,.08);
+        }
+        .welcome-aside strong { display:block; font-size: 1.1rem; margin-bottom: 7px; }
+        .welcome-aside span { display:block; color: rgba(255,255,255,.72); line-height: 1.6; font-size: .9rem; }
+        .daily-goal { margin-top:17px; }
+        .daily-goal-label { display:flex; justify-content:space-between; gap:10px; margin-bottom:8px; color:#fff; font-size:.82rem; font-weight:700; }
+        .daily-goal-track { height:8px; overflow:hidden; border-radius:999px; background:rgba(255,255,255,.18); }
+        .daily-goal-fill { width:0; height:100%; border-radius:inherit; background:#ffc3ca; transition:width .3s ease; }
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 14px;
+            margin-bottom: 34px;
+        }
+        .stat-card {
+            padding: 18px 20px;
+            border: 1px solid var(--card-border);
+            border-radius: 18px;
+            background: rgba(255,255,255,.76);
+        }
+        .stat-card span { display:block; color: var(--text-muted); font-size: .82rem; margin-bottom: 6px; }
+        .stat-card strong { display:block; color: var(--primary); font-size: 1.3rem; letter-spacing: -.03em; }
+        .section-heading {
+            display:flex;
+            justify-content:space-between;
+            align-items:end;
+            gap: 16px;
+            margin: 0 0 14px;
+        }
+        .section-heading h2 { margin:0 0 5px; color:var(--primary); font-size:1.35rem; letter-spacing:-.04em; }
+        .section-heading p { margin:0; color:var(--text-muted); font-size:.9rem; }
+        .filters {
+            width: 100%;
+            justify-content: flex-start;
+            border-radius: 18px;
+            padding: 12px;
+            margin-bottom: 18px;
+            background: rgba(255,255,255,.72);
+            border-color: var(--card-border);
+            box-shadow: none;
+        }
+        .filter-btn { border-radius: 11px; white-space: nowrap; }
+        .filter-btn.active { background: var(--primary); }
+        .filter-btn:focus-visible, .btn:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible {
+            outline: 3px solid rgba(198,83,104,.38);
+            outline-offset: 2px;
+        }
+        .study-select {
+            min-height: 40px;
+            border: 1px solid var(--card-border);
+            border-radius: 11px;
+            padding: 0 12px;
+            color: var(--primary);
+            font: 600 .85rem Inter, sans-serif;
+            background: #fff;
+        }
+        .progress-container { margin-bottom: 15px; }
+        .progress-text { letter-spacing: 0; }
+        .progress-bar-bg { max-width: none; height: 8px; background: #e9e7e1; box-shadow: none; }
+        .progress-bar-fill { background: linear-gradient(90deg, #c65368, #e68b8f); }
+        .scene { height: 390px; margin-bottom: 16px; }
+        .card:focus-visible { outline:3px solid rgba(198,83,104,.42); outline-offset:4px; border-radius:28px; }
+        .card__face { border-radius: 26px; border-color: #e9e7e1; backdrop-filter: none; }
+        .card__face--front { background: #fff; }
+        .card__face--back { background: #fffdfa; }
+        .kana-text { color: var(--primary); }
+        .meaning-text { color: var(--accent); }
+        .controls { gap: 10px; }
+        .memory-rating { display:flex; flex:1 1 auto; justify-content:center; gap:8px; }
+        .btn {
+            min-height: 48px;
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            background: #fff;
+            color: var(--primary);
+            box-shadow: 0 4px 12px rgba(32,44,59,.05);
+            backdrop-filter: none;
+        }
+        .btn:hover { background:#fff; color:var(--accent); }
+        .btn-icon { border-radius: 15px; }
+        .result-screen { background:#fff; border-color:var(--card-border); }
+        .result-score { color:var(--accent); }
+        .quiz-feedback {
+            display: none;
+            width: 80%;
+            margin-top: 12px;
+            padding: 11px 14px;
+            border-radius: 12px;
+            font-size: .92rem;
+            font-weight: 700;
+            line-height: 1.5;
+            text-align: center;
+        }
+        .quiz-feedback.is-correct { display:block; color:#176b4d; background:#e7f5ee; }
+        .quiz-feedback.is-incorrect { display:block; color:#9a3445; background:#fff0f1; }
+        .study-note { color:var(--text-muted); text-align:center; font-size:.82rem; margin:14px 0 0; }
+        .empty-state {
+            margin:20px 0;
+            padding:32px 22px;
+            border:1px solid var(--card-border);
+            border-radius:22px;
+            background:#fff;
+            text-align:center;
+        }
+        .empty-state h3 { margin:0 0 8px; color:var(--primary); }
+        .empty-state p { margin:0 0 18px; color:var(--text-muted); line-height:1.6; }
+        .empty-state .btn { margin:0 auto; }
+        .memory-button { padding-inline: 1rem; }
+        .memory-button--known { color:#176b4d; border-color:#cde7d9; background:#f4fbf6; }
+        .memory-button--known:hover { color:#145b42; background:#eaf7ef; }
+        .memory-button--review { color:#8c5a14; border-color:#f0dfba; background:#fffaf0; }
+        .speak-button {
+            position:absolute;
+            top:18px;
+            right:18px;
+            z-index:2;
+            display:grid;
+            place-items:center;
+            width:44px;
+            height:44px;
+            border:1px solid var(--card-border);
+            border-radius:14px;
+            color:var(--primary);
+            background:#fff;
+            cursor:pointer;
+        }
+        .speak-button:hover { color:var(--accent); border-color:var(--accent-light); }
+        .speak-button:disabled { opacity:.45; cursor:not-allowed; }
+        .speak-button svg { width:20px; height:20px; fill:currentColor; }
+        .mode-quiz .memory-rating { display:none; }
+        @media (max-width: 700px) {
+            body { padding: 20px 14px 42px; }
+            .top-nav { margin-bottom: 24px; }
+            .bg-circle { display:none; }
+            .welcome-panel { grid-template-columns:1fr; gap:20px; }
+            .welcome-aside { padding:17px; }
+            .dashboard-stats { gap:8px; }
+            .dashboard-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .stat-card { padding:13px 11px; }
+            .stat-card strong { font-size:1.05rem; }
+            .filters { overflow-x:auto; flex-wrap:nowrap; justify-content:flex-start; border-radius:14px; }
+            .section-heading { align-items:flex-start; flex-direction:column; }
+            .scene { height: 370px; }
+            .card__face { padding:1.5rem; }
+            .quiz-feedback { width: 100%; }
+            .controls { flex-wrap:wrap; }
+            .memory-rating { flex:1 1 100%; }
+            .memory-button { flex:1 1 calc(50% - 10px); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; scroll-behavior:auto !important; transition-duration:.01ms !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Elements -->
+    <div class="bg-circle bg-circle-1"></div>
+    <div class="bg-circle bg-circle-2"></div>
+
+    <div class="app-container">
+        
+        <nav class="top-nav" aria-label="Navigasi utama">
+            <div class="brand"><span class="brand-mark" aria-hidden="true"><ruby>日<rt>にち</rt></ruby></span><span>Nihongo Studio</span></div>
+            <a href="minna.html">Jelajahi materi <span aria-hidden="true">↗</span></a>
+        </nav>
+
+        <header class="header">
+            <div class="eyebrow">Belajar bahasa Jepang · dari dasar</div>
+            <h1>Langkah kecil, kemajuan besar.</h1>
+            <p id="header-count">Ruang belajar untuk kosakata, kana, kanji dasar, dan ungkapan sehari-hari.</p>
+        </header>
+
+        <section class="welcome-panel" aria-labelledby="welcome-title">
+            <div>
+                <div class="eyebrow">こんにちは · Konnichiwa</div>
+                <h2 id="welcome-title">Belajar Jepang dengan lebih terarah.</h2>
+                <p>Mulai dari satu kartu, pahami contoh kalimatnya, lalu uji ingatanmu. Latihan singkat dan rutin lebih efektif daripada menghafal semuanya sekaligus.</p>
+            </div>
+            <div class="welcome-aside">
+                <strong>Rencana belajar 15 menit</strong>
+                <span>5 menit mengulang kata · 5 menit belajar pola · 5 menit kuis tanpa melihat jawaban</span>
+                <div class="daily-goal">
+                    <div class="daily-goal-label"><span>Target hari ini</span><span id="daily-goal-count">0 / 20 kartu</span></div>
+                    <div class="daily-goal-track" id="daily-goal-track" role="progressbar" aria-label="Kemajuan target belajar hari ini" aria-valuemin="0" aria-valuemax="20" aria-valuenow="0">
+                        <div class="daily-goal-fill" id="daily-goal-fill"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="dashboard-stats" aria-label="Ringkasan materi">
+            <div class="stat-card"><span>Materi tersedia</span><strong id="stat-total">Memuat…</strong></div>
+            <div class="stat-card"><span>Streak belajar</span><strong id="stat-streak">0 hari</strong></div>
+            <div class="stat-card"><span>Kartu dikuasai</span><strong id="stat-mastered">0 kartu</strong></div>
+            <div class="stat-card"><span>Perlu diulang</span><strong id="stat-review">0 kartu</strong></div>
+        </section>
+
+        <div class="section-heading">
+            <div><h2>Mulai sesi belajarmu</h2><p>Pilih topik, lalu gunakan kartu atau kuis untuk berlatih aktif.</p></div>
+        </div>
+        
+        <!-- Filter Category Tabs -->
+        <div class="filters">
+            <button class="filter-btn active" id="filter-all" onclick="setCategory('all')">Semua</button>
+            <button class="filter-btn" id="filter-verb" onclick="setCategory('verb')">Kata Kerja</button>
+            <button class="filter-btn" id="filter-noun" onclick="setCategory('noun')">Kata Benda</button>
+            <button class="filter-btn" id="filter-adj" onclick="setCategory('adj')">Kata Sifat</button>
+            <button class="filter-btn" id="filter-hiragana" onclick="setCategory('hiragana')">Hiragana (46)</button>
+            <button class="filter-btn" id="filter-katakana" onclick="setCategory('katakana')">Katakana (46)</button>
+
+            <button class="filter-btn" id="filter-kanji" onclick="setCategory('kanji')">Kanji dasar</button>
+            <button class="filter-btn" id="filter-sentences" onclick="setCategory('sentences')">Kalimat latihan (15)</button>
+            <button class="filter-btn" id="filter-review" onclick="setCategory('review')">Perlu diulang (0)</button>
+            <a href="minna.html" class="filter-btn" style="display: inline-flex; align-items: center; justify-content: center; text-decoration: none; background: rgba(255, 143, 171, 0.12); color: #7c2d12;">Panduan materi</a>
+            <a href="latihan-soal.html" class="filter-btn" style="display: inline-flex; align-items: center; justify-content: center; text-decoration: none; background: rgba(255, 143, 171, 0.12); color: #7c2d12;">Simulasi JLPT N5/N4</a>
+            <a href="kaiwa.html" class="filter-btn" style="display: inline-flex; align-items: center; justify-content: center; text-decoration: none; background: rgba(82, 162, 255, 0.12); color: #0b4f79;">AI Kaiwa Room</a>
+            
+            <select id="study-mode" class="study-select" aria-label="Pilih mode belajar" onchange="applyMode()">
+                <option value="flashcard">Mode Flashcard</option>
+                <option value="quiz-jp-rm">Kuis (Jepang &rarr; Romaji)</option>
+                <option value="quiz-rm-jp">Kuis (Romaji &rarr; Jepang)</option>
+            </select>
+            
+            <!-- Quiz Limit Selector -->
+            <select id="quiz-limit" class="study-select" aria-label="Pilih jumlah kartu" onchange="applyQuizLimit()">
+                <option value="all">Semua Kartu</option>
+                <option value="10">10 Kartu Acak</option>
+                <option value="20">20 Kartu Acak</option>
+                <option value="50">50 Kartu Acak</option>
+                <option value="100">100 Kartu Acak</option>
+                <option value="500">500 Kartu Acak</option>
+            </select>
+        </div>
+        <p class="study-note" id="kanji-note" hidden>Ini kumpulan latihan kanji tingkat pemula, bukan daftar resmi atau lengkap untuk ujian JLPT N5.</p>
+
+        <div class="progress-container" id="progress-container">
+            <div class="progress-text"><span id="current-index">1</span> / <span id="total-cards">0</span></div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="progress-bar"></div>
+            </div>
+        </div>
+
+        <section class="empty-state" id="empty-state" hidden aria-live="polite">
+            <h3>Belum ada kartu untuk diulang</h3>
+            <p>Tandai kartu yang belum kamu hafal selama belajar. Kartu itu akan muncul di sini agar mudah ditemukan lagi.</p>
+            <button class="btn" type="button" onclick="setCategory('all')">Kembali ke semua kartu</button>
+        </section>
+
+        <div class="scene" id="scene">
+            <div class="card" id="flashcard" role="group" tabindex="0" aria-label="Kartu belajar. Tekan Enter atau Spasi untuk membalik." onclick="flipCard()">
+                <!-- Front Side -->
+                <div class="card__face card__face--front">
+                    <button class="speak-button" id="speak-button" type="button" onclick="event.stopPropagation(); speakCard()" aria-label="Dengarkan pengucapan Jepang" title="Dengarkan pengucapan Jepang">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4.03v8.05a4.5 4.5 0 0 0 2.5-4.02zM14 3.23v2.06a7 7 0 0 1 0 13.42v2.06a9 9 0 0 0 0-17.54z"/></svg>
+                    </button>
+                    <div class="kana-text" id="card-front-kana">-</div>
+                    <div class="romaji-text" id="card-front-romaji" style="font-size: 1.5rem; margin-top: -1rem; margin-bottom: 2rem;">-</div>
+                    
+                    <div class="flip-hint">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M21 12.586l-2.793-2.793-1.414 1.414L19.172 13.5H13v2h6.172l-2.379 2.293 1.414 1.414L21 16.414V12.586zM4 11.414l2.793 2.793 1.414-1.414L5.828 10.5H12v-2H5.828l2.379-2.293-1.414-1.414L4 7.586v3.828z"></path></svg>
+                        Tap untuk melihat arti
+                    </div>
+                </div>
+
+                <!-- Back Side -->
+                <div class="card__face card__face--back">
+                    <div class="category-badge" id="card-category">-</div>
+                    <div class="back-kana" id="card-back-kana">-</div>
+                    <div class="romaji-text" id="card-romaji">-</div>
+                    <div class="meaning-text" id="card-meaning">-</div>
+                    <div class="detail-box" id="card-usage">-</div>
+                    <div class="detail-box" id="card-note">-</div>
+                    <div class="example-box" id="card-example">
+                        -
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Input (Moved outside of card to fix layout overlap) -->
+        <div id="quiz-input-container">
+            <label class="study-note" for="quiz-input" id="quiz-prompt">Tulis jawabanmu, lalu tekan Enter untuk memeriksa.</label>
+            <input type="text" id="quiz-input" class="quiz-input" placeholder="Ketik jawaban..." autocomplete="off" aria-describedby="quiz-prompt quiz-feedback">
+            <div class="quiz-feedback" id="quiz-feedback" role="status" aria-live="polite"></div>
+            
+            <!-- Virtual Keyboard -->
+            <div id="virtual-keyboard-container">
+                <div class="vk-header">
+                    <button class="btn" style="padding: 0.3rem 0.8rem; font-size: 0.8rem;" onclick="toggleKanaType()" id="btn-kana-toggle">Ubah ke Katakana</button>
+                    <div>
+                        <button class="vk-key vk-action" style="padding: 0.3rem 0.8rem; margin-right: 2px;" onclick="vkModifier()" title="Dakuten, handakuten, atau kana kecil">&#12441; / &#12442; / kecil</button>
+                        <button class="vk-key vk-action" style="padding: 0.3rem 0.8rem;" onclick="vkBackspace()">&#9003; Hapus</button>
+                        <button class="vk-key vk-action" style="padding: 0.3rem 0.8rem;" onclick="vkSpace()">Spasi</button>
+                    </div>
+                </div>
+                <div class="vk-keys" id="vk-keys"></div>
+            </div>
+        </div>
+
+        <!-- Result Screen -->
+        <div class="result-screen" id="result-screen">
+            <div class="result-title">Hasil Kuis Selesai!</div>
+            <div class="result-score" id="result-score">0 / 46</div>
+            <div class="result-list" id="result-list">
+                <!-- Result items injected here -->
+            </div>
+            <button class="btn" style="margin: 0 auto;" onclick="restartQuiz()">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" style="margin-right: 5px;"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+                Ulangi Kuis
+            </button>
+        </div>
+
+        <div class="controls" id="controls">
+            <div class="memory-rating">
+                <button class="btn memory-button memory-button--review" type="button" onclick="rateCard(false)" title="Tandai kartu ini belum dikuasai">Belum hafal</button>
+                <button class="btn memory-button memory-button--known" type="button" onclick="rateCard(true)" title="Simpan kartu ini sebagai sudah dikuasai">Sudah ingat</button>
+            </div>
+            <button class="btn btn-icon btn-prev" onclick="prevCard()" title="Sebelumnya">
+                <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/></svg>
+            </button>
+            <button class="btn btn-shuffle" onclick="shuffleCards()" title="Acak Kartu">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
+                Acak
+            </button>
+            <button class="btn" onclick="nextCard()" id="btn-next" title="Berikutnya">
+                Selanjutnya
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+            </button>
+        </div>
+        <p class="study-note">Tip: tekan <strong>Spasi</strong> untuk membalik kartu, <strong>← →</strong> untuk berpindah, dan <strong>Enter</strong> untuk menjawab kuis.</p>
+        <p class="study-note" id="progress-message" role="status" aria-live="polite">Kemajuan kartu yang kamu ingat disimpan di perangkat ini.</p>
+
+    </div>
+
+    <!-- Data Import & External Libraries -->
+    <script src="https://unpkg.com/wanakana"></script>
+    <script src="data.js"></script>
+
+    <!-- Inline Grammar Data (to avoid encoding issues with data.js) -->
+    <script>
+                // ===== KANJI N5 DATA (80 Kanji) =====
+        const rawKanjiN5 = [
+            ["\u4e00", "Ichi / Hito(tsu)", "Satu", "Kanji N5", "\u4e00\u3064 (hitotsu) - Satu buah"],
+            ["\u4e8c", "Ni / Futa(tsu)", "Dua", "Kanji N5", "\u4e8c\u4eba (futari) - Dua orang"],
+            ["\u4e09", "San / Mi(ttsu)", "Tiga", "Kanji N5", "\u4e09\u6708 (sangatsu) - Bulan Maret"],
+            ["\u56db", "Shi / Yo(ttsu)", "Empat", "Kanji N5", "\u56db\u6642 (yoji) - Jam 4"],
+            ["\u4e94", "Go / Itsu(tsu)", "Lima", "Kanji N5", "\u4e94\u65e5 (itsuka) - Tanggal 5"],
+            ["\u516d", "Roku / Mu(ttsu)", "Enam", "Kanji N5", "\u516d\u6708 (rokugatsu) - Bulan Juni"],
+            ["\u4e03", "Shichi / Nana(tsu)", "Tujuh", "Kanji N5", "\u4e03\u6642 (shichiji) - Jam 7"],
+            ["\u516b", "Hachi / Ya(ttsu)", "Delapan", "Kanji N5", "\u516b\u767e (happyaku) - 800"],
+            ["\u4e5d", "Ku / Kyuu", "Sembilan", "Kanji N5", "\u4e5d\u6708 (kugatsu) - Bulan September"],
+            ["\u5341", "Juu / Too", "Sepuluh", "Kanji N5", "\u5341\u5206 (juppun) - 10 menit"],
+            ["\u767e", "Hyaku", "Seratus", "Kanji N5", "\u4e09\u767e (sanbyaku) - 300"],
+            ["\u5343", "Sen / Chi", "Seribu", "Kanji N5", "\u4e8c\u5343 (nisen) - 2000"],
+            ["\u4e07", "Man / Ban", "Sepuluh ribu", "Kanji N5", "\u4e00\u4e07\u5186 (ichiman en) - 10.000 yen"],
+            ["\u5186", "En / Maru", "Yen / Lingkaran", "Kanji N5", "\u4e94\u767e\u5186 (gohyaku en) - 500 yen"],
+            ["\u6642", "Ji / Toki", "Waktu / Jam", "Kanji N5", "\u4e09\u6642 (sanji) - Jam 3"],
+            ["\u5206", "Fun / Bun", "Menit / Bagian", "Kanji N5", "\u4e94\u5206 (gofun) - 5 menit"],
+            ["\u534a", "Han / Naka(ba)", "Setengah", "Kanji N5", "\u4e09\u6642\u534a (sanji han) - Jam 3:30"],
+            ["\u65e5", "Nichi / Hi / Ka", "Hari / Matahari", "Kanji N5", "\u6bce\u65e5 (mainichi) - Setiap hari"],
+            ["\u6708", "Getsu / Gatsu / Tsuki", "Bulan", "Kanji N5", "\u4eca\u6708 (kongetsu) - Bulan ini"],
+            ["\u706b", "Ka / Hi", "Api", "Kanji N5", "\u706b\u66dc\u65e5 (kayoubi) - Hari Selasa"],
+            ["\u6c34", "Sui / Mizu", "Air", "Kanji N5", "\u6c34\u66dc\u65e5 (suiyoubi) - Hari Rabu"],
+            ["\u6728", "Moku / Ki", "Pohon / Kayu", "Kanji N5", "\u6728\u66dc\u65e5 (mokuyoubi) - Hari Kamis"],
+            ["\u91d1", "Kin / Kane", "Emas / Uang", "Kanji N5", "\u91d1\u66dc\u65e5 (kinyoubi) - Hari Jumat"],
+            ["\u571f", "Do / Tsuchi", "Tanah", "Kanji N5", "\u571f\u66dc\u65e5 (doyoubi) - Hari Sabtu"],
+            ["\u5e74", "Nen / Toshi", "Tahun", "Kanji N5", "\u4eca\u5e74 (kotoshi) - Tahun ini"],
+            ["\u4eca", "Kon / Ima", "Sekarang", "Kanji N5", "\u4eca\u65e5 (kyou) - Hari ini"],
+            ["\u4f55", "Nan / Nani", "Apa", "Kanji N5", "\u4f55\u6642 (nanji) - Jam berapa?"],
+            ["\u4eba", "Jin / Nin / Hito", "Orang", "Kanji N5", "\u65e5\u672c\u4eba (nihonjin) - Orang Jepang"],
+            ["\u540d", "Mei / Na", "Nama", "Kanji N5", "\u540d\u524d (namae) - Nama"],
+            ["\u524d", "Zen / Mae", "Depan / Sebelum", "Kanji N5", "\u5348\u524d (gozen) - Pagi (AM)"],
+            ["\u5927", "Dai / Oo(kii)", "Besar", "Kanji N5", "\u5927\u5b66 (daigaku) - Universitas"],
+            ["\u5c0f", "Shou / Chii(sai) / Ko", "Kecil", "Kanji N5", "\u5c0f\u5b66\u6821 (shougakkou) - SD"],
+            ["\u9ad8", "Kou / Taka(i)", "Tinggi / Mahal", "Kanji N5", "\u9ad8\u6821 (koukou) - SMA"],
+            ["\u5b89", "An / Yasu(i)", "Murah / Aman", "Kanji N5", "\u5b89\u3044 (yasui) - Murah"],
+            ["\u65b0", "Shin / Atara(shii)", "Baru", "Kanji N5", "\u65b0\u805e (shinbun) - Koran"],
+            ["\u53e4", "Ko / Furu(i)", "Lama / Tua", "Kanji N5", "\u53e4\u3044 (furui) - Lama/tua"],
+            ["\u9577", "Chou / Naga(i)", "Panjang", "Kanji N5", "\u9577\u3044 (nagai) - Panjang"],
+            ["\u591a", "Ta / Oo(i)", "Banyak", "Kanji N5", "\u591a\u3044 (ooi) - Banyak"],
+            ["\u5c11", "Shou / Suko(shi) / Suku(nai)", "Sedikit", "Kanji N5", "\u5c11\u3057 (sukoshi) - Sedikit"],
+            ["\u4e0a", "Jou / Ue / Kami", "Atas", "Kanji N5", "\u4e0a\u624b (jouzu) - Pandai"],
+            ["\u4e0b", "Ka / Ge / Shita", "Bawah", "Kanji N5", "\u4e0b\u624b (heta) - Tidak pandai"],
+            ["\u4e2d", "Chuu / Naka", "Tengah / Dalam", "Kanji N5", "\u4e2d\u56fd (chuugoku) - Tiongkok"],
+            ["\u53f3", "U / Migi", "Kanan", "Kanji N5", "\u53f3 (migi) - Kanan"],
+            ["\u5de6", "Sa / Hidari", "Kiri", "Kanji N5", "\u5de6 (hidari) - Kiri"],
+            ["\u5317", "Hoku / Kita", "Utara", "Kanji N5", "\u5317\u6d77\u9053 (hokkaidou) - Hokkaido"],
+            ["\u5357", "Nan / Minami", "Selatan", "Kanji N5", "\u5357\u53e3 (minamiguchi) - Pintu selatan"],
+            ["\u6771", "Tou / Higashi", "Timur", "Kanji N5", "\u6771\u4eac (toukyou) - Tokyo"],
+            ["\u897f", "Sei / Sai / Nishi", "Barat", "Kanji N5", "\u95a2\u897f (kansai) - Kansai"],
+            ["\u5916", "Gai / Soto / Hoka", "Luar", "Kanji N5", "\u5916\u56fd (gaikoku) - Luar negeri"],
+            ["\u56fd", "Koku / Kuni", "Negara", "Kanji N5", "\u56fd (kuni) - Negara"],
+            ["\u8a9e", "Go / Kata(ru)", "Bahasa", "Kanji N5", "\u82f1\u8a9e (eigo) - Bahasa Inggris"],
+            ["\u5b66", "Gaku / Mana(bu)", "Belajar", "Kanji N5", "\u5b66\u751f (gakusei) - Siswa"],
+            ["\u6821", "Kou", "Sekolah", "Kanji N5", "\u5b66\u6821 (gakkou) - Sekolah"],
+            ["\u5148", "Sen / Saki", "Duluan / Depan", "Kanji N5", "\u5148\u751f (sensei) - Guru"],
+            ["\u751f", "Sei / Shou / I(kiru) / U(mu)", "Hidup / Lahir", "Kanji N5", "\u5b66\u751f (gakusei) - Murid"],
+            ["\u5c71", "San / Yama", "Gunung", "Kanji N5", "\u5bcc\u58eb\u5c71 (fujisan) - Gunung Fuji"],
+            ["\u5ddd", "Sen / Kawa", "Sungai", "Kanji N5", "\u5ddd (kawa) - Sungai"],
+            ["\u82b1", "Ka / Hana", "Bunga", "Kanji N5", "\u82b1\u898b (hanami) - Melihat bunga sakura"],
+            ["\u96e8", "U / Ame", "Hujan", "Kanji N5", "\u96e8 (ame) - Hujan"],
+            ["\u5929", "Ten / Ama", "Langit / Surga", "Kanji N5", "\u5929\u6c17 (tenki) - Cuaca"],
+            ["\u6c17", "Ki / Ke", "Semangat / Energi", "Kanji N5", "\u5143\u6c17 (genki) - Sehat"],
+            ["\u96fb", "Den", "Listrik", "Kanji N5", "\u96fb\u8a71 (denwa) - Telepon"],
+            ["\u8eca", "Sha / Kuruma", "Mobil / Kendaraan", "Kanji N5", "\u96fb\u8eca (densha) - Kereta"],
+            ["\u99c5", "Eki", "Stasiun", "Kanji N5", "\u6771\u4eac\u99c5 (toukyou eki) - Stasiun Tokyo"],
+            ["\u9053", "Dou / Michi", "Jalan", "Kanji N5", "\u5317\u6d77\u9053 (hokkaidou) - Hokkaido"],
+            ["\u98df", "Shoku / Ta(beru)", "Makan", "Kanji N5", "\u98df\u3079\u308b (taberu) - Makan"],
+            ["\u98f2", "In / No(mu)", "Minum", "Kanji N5", "\u98f2\u307f\u7269 (nomimono) - Minuman"],
+            ["\u8cb7", "Bai / Ka(u)", "Membeli", "Kanji N5", "\u8cb7\u3044\u7269 (kaimono) - Belanja"],
+            ["\u898b", "Ken / Mi(ru)", "Melihat", "Kanji N5", "\u898b\u308b (miru) - Melihat"],
+            ["\u805e", "Bun / Mon / Ki(ku)", "Mendengar", "Kanji N5", "\u65b0\u805e (shinbun) - Koran"],
+            ["\u8aad", "Doku / Yo(mu)", "Membaca", "Kanji N5", "\u8aad\u3080 (yomu) - Membaca"],
+            ["\u66f8", "Sho / Ka(ku)", "Menulis", "Kanji N5", "\u56f3\u66f8\u9928 (toshokan) - Perpustakaan"],
+            ["\u8a71", "Wa / Hanashi / Hana(su)", "Berbicara", "Kanji N5", "\u96fb\u8a71 (denwa) - Telepon"],
+            ["\u884c", "Kou / Gyou / I(ku) / Yu(ku)", "Pergi", "Kanji N5", "\u884c\u304f (iku) - Pergi"],
+            ["\u6765", "Rai / Ku(ru) / Ki(taru)", "Datang", "Kanji N5", "\u6765\u5e74 (rainen) - Tahun depan"],
+            ["\u51fa", "Shutsu / De(ru) / Da(su)", "Keluar", "Kanji N5", "\u51fa\u53e3 (deguchi) - Pintu keluar"],
+            ["\u5165", "Nyuu / Hai(ru) / I(ru)", "Masuk", "Kanji N5", "\u5165\u53e3 (iriguchi) - Pintu masuk"],
+            ["\u7acb", "Ritsu / Ta(tsu)", "Berdiri", "Kanji N5", "\u7acb\u3064 (tatsu) - Berdiri"],
+            ["\u4f11", "Kyuu / Yasu(mu)", "Istirahat", "Kanji N5", "\u4f11\u307f (yasumi) - Libur"],
+            ["\u7537", "Dan / Nan / Otoko", "Laki-laki", "Kanji N5", "\u7537\u306e\u5b50 (otoko no ko) - Anak laki-laki"],
+            ["\u5973", "Jo / Nyo / Onna", "Perempuan", "Kanji N5", "\u5973\u306e\u5b50 (onna no ko) - Anak perempuan"]
+        ];
+        const kanjiN5 = rawKanjiN5.map(item => ({
+            sisi_depan: item[0],
+            sisi_belakang_kana: item[0],
+            sisi_belakang_romaji: item[1],
+            arti_indonesia: item[2],
+            kategori: 'Kanji dasar',
+            contoh_kalimat: item[4]
+        }));
+
+        // ===== MINNA NO NIHONGO BAB 0-25 =====
+        const rawMinnaBab = [
+            ["Bab 0: Pengantar", "\u3042\u3044\u3046\u3048\u304a / Aiueo", "Huruf Hiragana & Katakana dasar, salam perkenalan", "Minna no Nihongo", "\u306f\u3058\u3081\u307e\u3057\u3066 (Hajimemashite) - Perkenalkan\n\u3069\u3046\u305e\u3088\u308d\u3057\u304f (Douzo yoroshiku) - Salam kenal"],
+            ["Bab 1: \u308f\u305f\u3057\u306f\uff5e\u3067\u3059", "Watashi wa ~ desu", "Perkenalan diri: nama, pekerjaan, kebangsaan. Partikel \u306f (wa), \u3082 (mo), \u306e (no)", "Minna no Nihongo", "~ \u306f ~ \u3067\u3059 (~ wa ~ desu) - ~ adalah ~\n~ \u3058\u3083\u3042\u308a\u307e\u305b\u3093 (~ jya arimasen) - bukan ~"],
+            ["Bab 2: \u3053\u308c/\u305d\u308c/\u3042\u308c", "Kore / Sore / Are", "Kata tunjuk benda: ini/itu. Partikel \u306e (no) kepemilikan", "Minna no Nihongo", "\u3053\u308c\u306f\u307b\u3093\u3067\u3059 (Kore wa hon desu) - Ini adalah buku\n\u305d\u308c\u306f\u3060\u308c\u306e\u3067\u3059\u304b (Sore wa dare no desuka) - Itu punya siapa?"],
+            ["Bab 3: \u3053\u3053/\u305d\u3053/\u3042\u305d\u3053", "Koko / Soko / Asoko", "Kata tunjuk tempat, letak benda, angka & harga", "Minna no Nihongo", "\u30c8\u30a4\u30ec\u306f\u3069\u3053\u3067\u3059\u304b (Toire wa doko desuka) - Toilet di mana?\n\u3053\u308c\u306f\u3044\u304f\u3089\u3067\u3059\u304b (Kore wa ikura desuka) - Ini berapa?"],
+            ["Bab 4: \u6642\u9593\u3068\u52d5\u8a5e", "Jikan to Doushi", "Waktu, jadwal harian. Kata kerja bentuk ~\u307e\u3059 (masu). Partikel \u306b (ni) untuk waktu", "Minna no Nihongo", "\u4eca\u4f55\u6642\u3067\u3059\u304b (Ima nanji desuka) - Sekarang jam berapa?\n7\u6642\u306b\u304a\u304d\u307e\u3059 (Shichiji ni okimasu) - Bangun jam 7"],
+            ["Bab 5: \u884c\u304d\u307e\u3059/\u6765\u307e\u3059", "Ikimasu / Kimasu", "Pergi/datang/pulang. Transportasi, partikel \u3078 (e), \u3067 (de), \u3068 (to)", "Minna no Nihongo", "\u5b66\u6821\u3078\u884c\u304d\u307e\u3059 (Gakkou e ikimasu) - Pergi ke sekolah\n\u30d0\u30b9\u3067\u884c\u304d\u307e\u3059 (Basu de ikimasu) - Pergi naik bus"],
+            ["Bab 6: \uff5e\u3092\u3057\u307e\u3059", "~ o shimasu", "Kata kerja transitif, partikel \u3092 (o). Aktivitas sehari-hari", "Minna no Nihongo", "\u3054\u306f\u3093\u3092\u305f\u3079\u307e\u3059 (Gohan o tabemasu) - Makan nasi\n\u3044\u3063\u3057\u3087\u306b\u3057\u307e\u305b\u3093\u304b (Issho ni shimasenka) - Mau bersama?"],
+            ["Bab 7: \u3042\u3052\u307e\u3059/\u3082\u3089\u3044\u307e\u3059", "Agemasu / Moraimasu", "Memberi dan menerima. Partikel \u306b (ni) untuk penerima", "Minna no Nihongo", "\u82b1\u3092\u3042\u3052\u307e\u3059 (Hana o agemasu) - Memberikan bunga\n\u53cb\u9054\u306b\u3082\u3089\u3044\u307e\u3057\u305f (Tomodachi ni moraimashita) - Menerima dari teman"],
+            ["Bab 8: \u5f62\u5bb9\u8a5e", "Keiyoushi", "Kata sifat -i dan -na. Deskripsi benda/orang/tempat", "Minna no Nihongo", "\u5bcc\u58eb\u5c71\u306f\u305f\u304b\u3044\u3067\u3059 (Fujisan wa takai desu) - Gunung Fuji tinggi\n\u6771\u4eac\u306f\u306b\u304e\u3084\u304b\u3067\u3059 (Toukyou wa nigiyaka desu) - Tokyo ramai"],
+            ["Bab 9: \u597d\u304d/\u5acc\u3044/\u4e0a\u624b/\u4e0b\u624b", "Suki / Kirai / Jouzu / Heta", "Suka/tidak suka, kemampuan. Partikel \u304c (ga) dengan kata sifat", "Minna no Nihongo", "\u97f3\u697d\u304c\u3059\u304d\u3067\u3059 (Ongaku ga suki desu) - Suka musik\n\u65e5\u672c\u8a9e\u304c\u3058\u3087\u3046\u305a\u3067\u3059 (Nihongo ga jouzu desu) - Pandai bahasa Jepang"],
+            ["Bab 10: \u3042\u308a\u307e\u3059/\u3044\u307e\u3059", "Arimasu / Imasu", "Keberadaan benda (arimasu) & makhluk hidup (imasu). Posisi", "Minna no Nihongo", "\u3064\u304f\u3048\u306e\u4e0a\u306b\u307b\u3093\u304c\u3042\u308a\u307e\u3059 (Tsukue no ue ni hon ga arimasu) - Di atas meja ada buku\n\u306d\u3053\u304c\u3044\u307e\u3059 (Neko ga imasu) - Ada kucing"],
+            ["Bab 11: \u52a9\u6570\u8a5e", "Josuushi", "Kata bilangan/penghitung: ~\u3064, ~\u4eba, ~\u679a, ~\u53f0, ~\u56de, ~\u672c", "Minna no Nihongo", "\u308a\u3093\u3054\u3092\u307f\u3063\u3064\u304f\u3060\u3055\u3044 (Ringo o mittsu kudasai) - Tolong 3 apel\n\u5b50\u4f9b\u304c\u4e8c\u4eba\u3044\u307e\u3059 (Kodomo ga futari imasu) - Ada 2 anak"],
+            ["Bab 12: \u6bd4\u8f03", "Hikaku", "Perbandingan: ~\u3088\u308a (yori), \u3044\u3061\u3070\u3093 (ichiban). Kata sifat bentuk lampau", "Minna no Nihongo", "\u65e5\u672c\u306f\u30a4\u30f3\u30c9\u30cd\u30b7\u30a2\u3088\u308a\u5c0f\u3055\u3044\u3067\u3059 (Nihon wa Indonesia yori chiisai desu) - Jepang lebih kecil dari Indonesia"],
+            ["Bab 13: \uff5e\u305f\u3044\u3067\u3059", "~tai desu", "Keinginan: ~\u305f\u3044 (tai), ~\u307b\u3057\u3044 (hoshii). Tujuan pergi: ~\u306b\u884c\u304d\u307e\u3059", "Minna no Nihongo", "\u3059\u3057\u3092\u305f\u3079\u305f\u3044\u3067\u3059 (Sushi o tabetai desu) - Ingin makan sushi\n\u65e5\u672c\u3078\u884c\u304d\u305f\u3044\u3067\u3059 (Nihon e ikitai desu) - Ingin pergi ke Jepang"],
+            ["Bab 14: \u3066\u5f62", "Te-kei", "Bentuk ~\u3066 (te-form). Minta tolong: ~\u3066\u304f\u3060\u3055\u3044. Sedang: ~\u3066\u3044\u307e\u3059", "Minna no Nihongo", "\u3061\u3087\u3063\u3068\u307e\u3063\u3066\u304f\u3060\u3055\u3044 (Chotto matte kudasai) - Tolong tunggu\n\u4eca\u98df\u3079\u3066\u3044\u307e\u3059 (Ima tabete imasu) - Sedang makan"],
+            ["Bab 15: \uff5e\u3066\u3082\u3044\u3044\u3067\u3059", "~te mo ii desu", "Izin: ~\u3066\u3082\u3044\u3044. Larangan: ~\u3066\u306f\u3044\u3051\u307e\u305b\u3093. Keadaan: ~\u3066\u3044\u307e\u3059", "Minna no Nihongo", "\u3057\u3083\u3057\u3093\u3092\u3068\u3063\u3066\u3082\u3044\u3044\u3067\u3059\u304b (Shashin o tottemo ii desuka) - Boleh foto?\n\u3053\u3053\u3067\u305f\u3070\u3053\u3092\u3059\u3063\u3066\u306f\u3044\u3051\u307e\u305b\u3093 (tabako o sutte wa ikemasen) - Dilarang merokok"],
+            ["Bab 16: \uff5e\u3066\u304b\u3089", "~te kara", "Urutan: ~\u3066\u304b\u3089 (setelah). Menghubungkan kalimat dengan ~\u3066", "Minna no Nihongo", "\u624b\u3092\u6d17\u3063\u3066\u304b\u3089\u98df\u3079\u307e\u3059 (Te o aratte kara tabemasu) - Cuci tangan lalu makan\n\u5b89\u304f\u3066\u304a\u3044\u3057\u3044\u3067\u3059 (Yasukute oishii desu) - Murah dan enak"],
+            ["Bab 17: \u306a\u3044\u5f62", "Nai-kei", "Bentuk negatif biasa (nai-form). Keharusan: ~\u306a\u3051\u308c\u3070\u306a\u308a\u307e\u305b\u3093", "Minna no Nihongo", "\u85ac\u3092\u306e\u307e\u306a\u3051\u308c\u3070\u306a\u308a\u307e\u305b\u3093 (Kusuri o nomanakereba narimasen) - Harus minum obat\n\u305f\u3070\u3053\u3092\u3059\u308f\u306a\u3044\u3067\u304f\u3060\u3055\u3044 (Tabako o suwanaide kudasai) - Jangan merokok"],
+            ["Bab 18: \u8f9e\u66f8\u5f62", "Jisho-kei", "Bentuk kamus (dictionary form). Kemampuan: ~\u3053\u3068\u304c\u3067\u304d\u307e\u3059. Hobi: ~\u3053\u3068\u3067\u3059", "Minna no Nihongo", "\u65e5\u672c\u8a9e\u3092\u8a71\u3059\u3053\u3068\u304c\u3067\u304d\u307e\u3059 (Nihongo o hanasu koto ga dekimasu) - Bisa bahasa Jepang\n\u8da3\u5473\u306f\u6cf3\u3050\u3053\u3068\u3067\u3059 (Shumi wa oyogu koto desu) - Hobi berenang"],
+            ["Bab 19: \u305f\u5f62", "Ta-kei", "Bentuk lampau biasa (ta-form). Pengalaman: ~\u305f\u3053\u3068\u304c\u3042\u308a\u307e\u3059", "Minna no Nihongo", "\u65e5\u672c\u3078\u884c\u3063\u305f\u3053\u3068\u304c\u3042\u308a\u307e\u3059 (Nihon e itta koto ga arimasu) - Pernah ke Jepang\n\u3082\u3046\u98df\u3079\u307e\u3057\u305f (Mou tabemashita) - Sudah makan"],
+            ["Bab 20: \u666e\u901a\u5f62", "Futsuu-kei", "Bentuk biasa/informal. Percakapan santai, ~\u3093\u3067\u3059", "Minna no Nihongo", "\u660e\u65e5\u884c\u304f (Ashita iku) - Besok pergi [informal]\n\u3053\u306e\u6620\u753b\u898b\u305f? (Kono eiga mita?) - Sudah nonton film ini?"],
+            ["Bab 21: \uff5e\u3068\u601d\u3044\u307e\u3059", "~to omoimasu", "Pendapat: ~\u3068\u601d\u3044\u307e\u3059. Kutipan: ~\u3068\u8a00\u3044\u307e\u3057\u305f. Bentuk biasa + \u3068\u601d\u3046", "Minna no Nihongo", "\u660e\u65e5\u96e8\u304c\u964d\u308b\u3068\u601d\u3044\u307e\u3059 (Ashita ame ga furu to omoimasu) - Saya pikir besok hujan\n\u5148\u751f\u306f\u3082\u3046\u5e30\u3063\u305f\u3068\u8a00\u3044\u307e\u3057\u305f - Kata guru sudah pulang"],
+            ["Bab 22: \u9023\u4f53\u4fee\u98fe", "Rentai Shuushoku", "Memodifikasi kata benda dengan kalimat. Klausa relatif", "Minna no Nihongo", "\u6628\u65e5\u8cb7\u3063\u305f\u672c (Kinou katta hon) - Buku yang dibeli kemarin\n\u3042\u306e\u8d64\u3044\u304b\u3070\u3093\u306f\u308f\u305f\u3057\u306e\u3067\u3059 - Tas merah itu milik saya"],
+            ["Bab 23: \uff5e\u3068\u304d/\uff5e\u3068", "~toki / ~to", "Waktu: ~\u3068\u304d (ketika). Kondisi otomatis: ~\u3068 (kalau)", "Minna no Nihongo", "\u5b50\u4f9b\u306e\u3068\u304d\u3088\u304f\u904a\u3073\u307e\u3057\u305f (Kodomo no toki yoku asobimashita) - Waktu kecil sering bermain\n\u6625\u306b\u306a\u308b\u3068\u6696\u304b\u304f\u306a\u308a\u307e\u3059 (Haru ni naru to atatakaku narimasu) - Kalau musim semi jadi hangat"],
+            ["Bab 24: \u304f\u308c\u307e\u3059", "Kuremasu", "Memberi (kepada saya): ~\u3066\u304f\u308c\u307e\u3059. ~\u3066\u3042\u3052\u307e\u3059, ~\u3066\u3082\u3089\u3044\u307e\u3059", "Minna no Nihongo", "\u53cb\u9054\u304c\u6559\u3048\u3066\u304f\u308c\u307e\u3057\u305f (Tomodachi ga oshiete kuremashita) - Teman mengajarkan saya\n\u6bcd\u304c\u4f5c\u3063\u3066\u304f\u308c\u307e\u3057\u305f (Haha ga tsukutte kuremashita) - Ibu membuatkan saya"],
+            ["Bab 25: \uff5e\u305f\u3089", "~tara", "Pengandaian: ~\u305f\u3089 (kalau/jika). ~\u3066\u3082 (walaupun)", "Minna no Nihongo", "\u96e8\u304c\u964d\u3063\u305f\u3089\u884c\u304d\u307e\u305b\u3093 (Ame ga futtara ikimasen) - Kalau hujan tidak pergi\n\u5b89\u304f\u3066\u3082\u8cb7\u3044\u307e\u305b\u3093 (Yasukutemo kaimasen) - Walaupun murah tidak beli"]
+        ];
+        const minneBab = rawMinnaBab.map(item => ({
+            sisi_depan: item[0],
+            sisi_belakang_kana: item[0],
+            sisi_belakang_romaji: item[1],
+            arti_indonesia: item[2],
+            kategori: item[3],
+            contoh_kalimat: item[4]
+        }));
+
+        // Append kartu utama ke semuaKata (Minna no Nihongo dipindahkan ke halaman materi)
+        if (typeof semuaKata !== 'undefined') {
+            semuaKata.push(...kanjiN5);
+        }
+    </script>
+
+    <!-- Application Logic -->
+    <script>
+        let currentCollection = [];
+        let currentIndex = 0;
+        let isFlipped = false;
+        let totalCards = 0;
+        let studyMode = 'flashcard'; // 'flashcard', 'quiz-jp-rm', 'quiz-rm-jp'
+        let quizAnswers = [];
+        let activeCategory = 'all';
+        let isKatakanaKeyboard = false;
+        let wanakanaBound = false;
+        let awaitingNextQuestion = false;
+        const masteredStorageKey = 'nihongo-studio-mastered-v1';
+        const reviewStorageKey = 'nihongo-studio-review-v1';
+        const dailyStudyStorageKey = 'nihongo-studio-daily-study-v1';
+        const dailyStudyGoal = 20;
+        let masteredCards = new Set();
+        let reviewCards = new Set();
+        let dailyStudy = { date: '', count: 0, streak: 0 };
+
+        // DOM Elements
+        const cardEl = document.getElementById('flashcard');
+        const frontKanaEl = document.getElementById('card-front-kana');
+        const frontRomajiEl = document.getElementById('card-front-romaji');
+        const categoryEl = document.getElementById('card-category');
+        const backKanaEl = document.getElementById('card-back-kana');
+        const romajiEl = document.getElementById('card-romaji');
+        const meaningEl = document.getElementById('card-meaning');
+        const exampleEl = document.getElementById('card-example');
+        const cardUsageEl = document.getElementById('card-usage');
+        const cardNoteEl = document.getElementById('card-note');
+        const currentIndexEl = document.getElementById('current-index');
+        const totalCardsEl = document.getElementById('total-cards');
+        const progressBarEl = document.getElementById('progress-bar');
+        const quizInput = document.getElementById('quiz-input');
+        const vkContainer = document.getElementById('virtual-keyboard-container');
+        
+        const filterBtns = {
+            'all': document.getElementById('filter-all'),
+            'verb': document.getElementById('filter-verb'),
+            'noun': document.getElementById('filter-noun'),
+            'adj': document.getElementById('filter-adj'),
+            'hiragana': document.getElementById('filter-hiragana'),
+            'katakana': document.getElementById('filter-katakana'),
+            'kanji': document.getElementById('filter-kanji'),
+            'sentences': document.getElementById('filter-sentences'),
+            'review': document.getElementById('filter-review')
+        };
+
+        // Init
+        document.addEventListener('DOMContentLoaded', () => {
+            if(typeof semuaKata !== 'undefined') {
+                // Update header count dynamically
+                const totalAll = semuaKata.length;
+                document.getElementById('header-count').innerText = totalAll + ' kartu belajar mencakup kosakata, kana, kanji dasar, dan ungkapan sehari-hari.';
+                document.getElementById('stat-total').innerText = totalAll.toLocaleString('id-ID') + ' kartu';
+                const allBtn = document.getElementById('filter-all');
+                allBtn.innerText = 'Semua (' + totalAll + ')';
+                // Update verb/noun/adj counts
+                if(typeof kataKerja !== 'undefined') document.getElementById('filter-verb').innerText = 'Kata Kerja (' + kataKerja.length + ')';
+                if(typeof kataBenda !== 'undefined') document.getElementById('filter-noun').innerText = 'Kata Benda (' + kataBenda.length + ')';
+                if(typeof kataSifat !== 'undefined') document.getElementById('filter-adj').innerText = 'Kata Sifat (' + kataSifat.length + ')';
+                if(typeof kalimatLatihan !== 'undefined') document.getElementById('filter-sentences').innerText = 'Kalimat latihan (' + kalimatLatihan.length + ')';
+                document.getElementById('filter-hiragana').innerText = 'Hiragana (' + hiragana.length + ')';
+                document.getElementById('filter-katakana').innerText = 'Katakana (' + katakana.length + ')';
+                document.getElementById('filter-kanji').innerText = 'Kanji dasar (' + kanjiN5.length + ')';
+                loadMasteredCards();
+                loadReviewCards();
+                loadDailyStudy();
+                updateMasteredCount();
+                updateReviewCount();
+                updateDailyStudyDisplay();
+                document.getElementById('speak-button').disabled = !('speechSynthesis' in window);
+                setCategory('all');
+            } else {
+                alert("Data gagal dimuat. Pastikan file data.js ada di folder yang sama.");
+            }
+        });
+
+        function setCategory(cat) {
+            activeCategory = cat;
+            document.getElementById('kanji-note').hidden = cat !== 'kanji';
+            Object.values(filterBtns).forEach(btn => { if(btn) btn.classList.remove('active'); });
+            if (filterBtns[cat]) filterBtns[cat].classList.add('active');
+            
+            applyModeSettings();
+            
+            if(cat === 'verb') { currentCollection = [...kataKerja]; }
+            else if(cat === 'noun') { currentCollection = [...kataBenda]; }
+            else if(cat === 'adj') { currentCollection = [...kataSifat]; }
+            else if(cat === 'hiragana') { currentCollection = [...hiragana]; }
+            else if(cat === 'katakana') { currentCollection = [...katakana]; }
+            else if(cat === 'kanji') { currentCollection = [...kanjiN5]; }
+            else if(cat === 'sentences') { currentCollection = [...kalimatLatihan]; }
+            else if(cat === 'review') { currentCollection = [...semuaKata].filter(card => reviewCards.has(getCardKey(card))); }
+            else { currentCollection = [...semuaKata]; }
+            
+            resetAndStart();
+        }
+        
+        function applyMode() {
+            studyMode = document.getElementById('study-mode').value;
+            applyModeSettings();
+            resetAndStart();
+        }
+        
+        function applyQuizLimit() {
+            resetAndStart();
+        }
+
+        function loadMasteredCards() {
+            try {
+                const stored = JSON.parse(localStorage.getItem(masteredStorageKey) || '[]');
+                if (Array.isArray(stored)) {
+                    masteredCards = new Set(stored.filter((key) => typeof key === 'string'));
+                }
+            } catch (error) {
+                console.error('Progress belajar tidak dapat dibaca dari penyimpanan lokal.', error);
+                document.getElementById('progress-message').textContent = 'Progress lama tidak dapat dibaca. Kamu masih bisa belajar, tetapi kemajuan sesi ini mungkin tidak tersimpan.';
+            }
+        }
+
+        function loadReviewCards() {
+            try {
+                const stored = JSON.parse(localStorage.getItem(reviewStorageKey) || '[]');
+                if (Array.isArray(stored)) {
+                    reviewCards = new Set(stored.filter((key) => typeof key === 'string'));
+                }
+            } catch (error) {
+                console.error('Daftar kartu yang perlu diulang tidak dapat dibaca.', error);
+                document.getElementById('progress-message').textContent = 'Daftar kartu review tidak dapat dibaca dari penyimpanan perangkat.';
+            }
+        }
+
+        function updateMasteredCount() {
+            document.getElementById('stat-mastered').innerText = masteredCards.size.toLocaleString('id-ID') + ' kartu';
+        }
+
+        function updateReviewCount() {
+            const count = reviewCards.size.toLocaleString('id-ID');
+            document.getElementById('stat-review').innerText = count + ' kartu';
+            document.getElementById('filter-review').innerText = 'Perlu diulang (' + count + ')';
+        }
+
+        function getLocalDateKey(date = new Date()) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        function getCalendarDayDifference(firstDate, secondDate) {
+            const first = Date.parse(`${firstDate}T00:00:00Z`);
+            const second = Date.parse(`${secondDate}T00:00:00Z`);
+            return Math.round((second - first) / 86400000);
+        }
+
+        function loadDailyStudy() {
+            try {
+                const stored = JSON.parse(localStorage.getItem(dailyStudyStorageKey) || 'null');
+                if (stored && typeof stored.date === 'string' && Number.isInteger(stored.count) && Number.isInteger(stored.streak)) {
+                    dailyStudy = { date: stored.date, count: Math.max(0, stored.count), streak: Math.max(0, stored.streak) };
+                }
+                const today = getLocalDateKey();
+                const gap = dailyStudy.date ? getCalendarDayDifference(dailyStudy.date, today) : Infinity;
+                if (gap > 1) dailyStudy.streak = 0;
+                if (gap > 0) dailyStudy.count = 0;
+            } catch (error) {
+                console.error('Catatan target belajar tidak dapat dibaca.', error);
+                document.getElementById('progress-message').textContent = 'Catatan target belajar tidak dapat dibaca dari penyimpanan perangkat.';
+            }
+        }
+
+        function updateDailyStudyDisplay() {
+            const count = dailyStudy.date === getLocalDateKey() ? dailyStudy.count : 0;
+            document.getElementById('stat-streak').textContent = dailyStudy.streak.toLocaleString('id-ID') + ' hari';
+            document.getElementById('daily-goal-count').textContent = `${Math.min(count, dailyStudyGoal)} / ${dailyStudyGoal} kartu`;
+            document.getElementById('daily-goal-fill').style.width = `${Math.min(100, count / dailyStudyGoal * 100)}%`;
+            document.getElementById('daily-goal-track').setAttribute('aria-valuenow', String(Math.min(count, dailyStudyGoal)));
+        }
+
+        function recordStudyActivity() {
+            const today = getLocalDateKey();
+            if (dailyStudy.date !== today) {
+                const gap = dailyStudy.date ? getCalendarDayDifference(dailyStudy.date, today) : Infinity;
+                dailyStudy.streak = gap === 1 ? dailyStudy.streak + 1 : 1;
+                dailyStudy.date = today;
+                dailyStudy.count = 0;
+            }
+            dailyStudy.count++;
+            updateDailyStudyDisplay();
+            try {
+                localStorage.setItem(dailyStudyStorageKey, JSON.stringify(dailyStudy));
+                document.getElementById('progress-message').textContent = dailyStudy.count >= dailyStudyGoal
+                    ? `Target hari ini tercapai! Streak belajarmu ${dailyStudy.streak} hari.`
+                    : `Satu kartu selesai. ${Math.max(0, dailyStudyGoal - dailyStudy.count)} kartu lagi menuju target harian.`;
+            } catch (error) {
+                console.error('Catatan belajar harian tidak dapat disimpan.', error);
+                document.getElementById('progress-message').textContent = 'Progress sesi tercatat, tetapi browser tidak dapat menyimpan target harian.';
+            }
+        }
+
+        function getCardKey(data) {
+            return JSON.stringify([data.kategori, data.sisi_depan, data.sisi_belakang_romaji, data.arti_indonesia]);
+        }
+
+        function rateCard(isMastered) {
+            if (studyMode !== 'flashcard' || currentCollection.length === 0) return;
+            const cardKey = getCardKey(currentCollection[currentIndex]);
+            if (isMastered) {
+                masteredCards.add(cardKey);
+                reviewCards.delete(cardKey);
+            } else {
+                masteredCards.delete(cardKey);
+                reviewCards.add(cardKey);
+            }
+            updateMasteredCount();
+            updateReviewCount();
+            try {
+                localStorage.setItem(masteredStorageKey, JSON.stringify([...masteredCards]));
+                localStorage.setItem(reviewStorageKey, JSON.stringify([...reviewCards]));
+                document.getElementById('progress-message').textContent = isMastered
+                    ? 'Bagus! Kartu ini tersimpan sebagai sudah dikuasai.'
+                    : 'Kartu ini masuk ke daftar Perlu diulang. Pilih filter tersebut kapan saja untuk berlatih lagi.';
+            } catch (error) {
+                console.error('Progress belajar tidak dapat disimpan ke penyimpanan lokal.', error);
+                document.getElementById('progress-message').textContent = 'Browser tidak dapat menyimpan progress. Kartu tetap bisa dipelajari selama sesi ini.';
+            }
+            recordStudyActivity();
+            nextCard();
+        }
+
+        function speakCard() {
+            if (!('speechSynthesis' in window) || currentCollection.length === 0) return;
+            const utterance = new SpeechSynthesisUtterance(currentCollection[currentIndex].sisi_depan);
+            utterance.lang = 'ja-JP';
+            utterance.rate = 0.88;
+            window.speechSynthesis.cancel();
+            window.speechSynthesis.speak(utterance);
+        }
+        
+        function resetAndStart() {
+            if(isFlipped) {
+                cardEl.classList.remove('is-flipped');
+                isFlipped = false;
+            }
+            
+            for (let i = currentCollection.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [currentCollection[i], currentCollection[j]] = [currentCollection[j], currentCollection[i]];
+            }
+            
+            const limitVal = document.getElementById('quiz-limit').value;
+            if (limitVal !== 'all') {
+                const limit = parseInt(limitVal);
+                if (limit && limit < currentCollection.length) {
+                    currentCollection = currentCollection.slice(0, limit);
+                }
+            }
+            
+            totalCards = currentCollection.length;
+            totalCardsEl.innerText = totalCards;
+            currentIndex = 0;
+            quizAnswers = [];
+            awaitingNextQuestion = false;
+            quizInput.value = '';
+            quizInput.disabled = false;
+            const feedback = document.getElementById('quiz-feedback');
+            feedback.className = 'quiz-feedback';
+            feedback.textContent = '';
+            document.getElementById('btn-next').setAttribute('aria-label', studyMode === 'flashcard' ? 'Kartu berikutnya' : 'Periksa jawaban');
+            
+            const hasCards = totalCards > 0;
+            document.getElementById('result-screen').style.display = 'none';
+            document.getElementById('scene').style.display = hasCards ? 'block' : 'none';
+            document.getElementById('controls').style.display = hasCards ? 'flex' : 'none';
+            document.getElementById('progress-container').style.display = hasCards ? 'flex' : 'none';
+            document.getElementById('quiz-input-container').style.display = hasCards ? '' : 'none';
+            document.getElementById('empty-state').hidden = hasCards || activeCategory !== 'review';
+            
+            loadCard(currentIndex, 'next');
+            if (studyMode !== 'flashcard') {
+                setTimeout(() => quizInput.focus(), 100);
+            }
+        }
+        
+        function applyModeSettings() {
+            if (studyMode === 'flashcard') {
+                document.body.classList.remove('mode-quiz', 'mode-quiz-rm-jp');
+                document.getElementById('btn-next').innerHTML = 'Selanjutnya <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>';
+                vkContainer.style.display = 'none';
+            } else {
+                document.body.classList.add('mode-quiz');
+                document.getElementById('btn-next').innerHTML = 'Periksa jawaban <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>';
+                
+                if (studyMode === 'quiz-rm-jp') {
+                    document.body.classList.add('mode-quiz-rm-jp');
+                    vkContainer.style.display = 'block';
+                    renderKeyboard();
+                    
+                    if (!wanakanaBound && typeof wanakana !== 'undefined') {
+                        wanakana.bind(quizInput, { IMEMode: true });
+                        wanakanaBound = true;
+                    }
+                } else {
+                    document.body.classList.remove('mode-quiz-rm-jp');
+                    vkContainer.style.display = 'none';
+                    
+                    if (wanakanaBound && typeof wanakana !== 'undefined') {
+                        wanakana.unbind(quizInput);
+                        wanakanaBound = false;
+                    }
+                }
+            }
+        }
+        
+        function renderKeyboard() {
+            const kbContainer = document.getElementById('vk-keys');
+            kbContainer.innerHTML = '';
+            const uniqueKana = (isKatakanaKeyboard ? katakana : hiragana).slice(0, 46);
+            
+            uniqueKana.forEach(k => {
+                const btn = document.createElement('button');
+                btn.className = 'vk-key';
+                btn.innerText = k.sisi_depan;
+                btn.onclick = () => {
+                    quizInput.value += k.sisi_depan;
+                    quizInput.focus();
+                };
+                kbContainer.appendChild(btn);
+            });
+        }
+        
+        function toggleKanaType() {
+            isKatakanaKeyboard = !isKatakanaKeyboard;
+            document.getElementById('btn-kana-toggle').innerText = isKatakanaKeyboard ? 'Ubah ke Hiragana' : 'Ubah ke Katakana';
+            renderKeyboard();
+        }
+        
+        const modifierMap = new Map();
+        const registerKanaPairs = (pairs) => {
+            pairs.forEach(([plain, marked]) => {
+                modifierMap.set(plain, marked);
+                modifierMap.set(marked, plain);
+            });
+        };
+        registerKanaPairs([
+            ['\u304b','\u304c'], ['\u304d','\u304e'], ['\u304f','\u3050'], ['\u3051','\u3052'], ['\u3053','\u3054'],
+            ['\u3055','\u3056'], ['\u3057','\u3058'], ['\u3059','\u305a'], ['\u305b','\u305c'], ['\u305d','\u305e'],
+            ['\u305f','\u3060'], ['\u3061','\u3062'], ['\u3064','\u3065'], ['\u3066','\u3067'], ['\u3068','\u3069'],
+            ['\u3042','\u3041'], ['\u3044','\u3043'], ['\u3046','\u3045'], ['\u3048','\u3047'], ['\u304a','\u3049'],
+            ['\u3084','\u3083'], ['\u3086','\u3085'], ['\u3088','\u3087'],
+            ['\u30ab','\u30ac'], ['\u30ad','\u30ae'], ['\u30af','\u30b0'], ['\u30b1','\u30b2'], ['\u30b3','\u30b4'],
+            ['\u30b5','\u30b6'], ['\u30b7','\u30b8'], ['\u30b9','\u30ba'], ['\u30bb','\u30bc'], ['\u30bd','\u30be'],
+            ['\u30bf','\u30c0'], ['\u30c1','\u30c2'], ['\u30c6','\u30c7'], ['\u30c8','\u30c9'],
+            ['\u30a2','\u30a1'], ['\u30a4','\u30a3'], ['\u30a6','\u30a5'], ['\u30a8','\u30a7'], ['\u30aa','\u30a9'],
+            ['\u30e4','\u30e3'], ['\u30e6','\u30e5'], ['\u30e8','\u30e7']
+        ]);
+        [['\u3064','\u3065','\u3063'], ['\u30c4','\u30c5','\u30c3']].forEach(([plain, voiced, small]) => {
+            modifierMap.set(plain, voiced);
+            modifierMap.set(voiced, small);
+            modifierMap.set(small, plain);
+        });
+        [
+            ['\u306f','\u3070','\u3071'], ['\u3072','\u3073','\u3074'], ['\u3075','\u3076','\u3077'],
+            ['\u3078','\u3079','\u307a'], ['\u307b','\u307c','\u307d'],
+            ['\u30cf','\u30d0','\u30d1'], ['\u30d2','\u30d3','\u30d4'], ['\u30d5','\u30d6','\u30d7'],
+            ['\u30d8','\u30d9','\u30da'], ['\u30db','\u30dc','\u30dd']
+        ].forEach(([plain, voiced, semiVoiced]) => {
+            modifierMap.set(plain, voiced);
+            modifierMap.set(voiced, semiVoiced);
+            modifierMap.set(semiVoiced, plain);
+        });
+
+        function vkModifier() {
+            let val = quizInput.value;
+            if (val.length === 0) return;
+            let lastChar = val.slice(-1);
+            if (modifierMap.has(lastChar)) {
+                quizInput.value = val.slice(0, -1) + modifierMap.get(lastChar);
+            }
+            quizInput.focus();
+        }
+        
+        function vkBackspace() {
+            quizInput.value = quizInput.value.slice(0, -1);
+            quizInput.focus();
+        }
+        
+        function vkSpace() {
+            quizInput.value += ' ';
+            quizInput.focus();
+        }
+
+        function loadCard(index, direction = 'next') {
+            if (currentCollection.length === 0) return;
+            const data = currentCollection[index];
+            
+            if(isFlipped && studyMode === 'flashcard') {
+                cardEl.classList.remove('is-flipped');
+                isFlipped = false;
+                setTimeout(() => updateCardContent(data, index, direction), 400); 
+            } else {
+                updateCardContent(data, index, direction);
+            }
+        }
+
+        function kanaReadingFromRomaji(romaji) {
+            if (typeof wanakana === 'undefined' || typeof wanakana.toHiragana !== 'function') {
+                console.error('Furigana kanji tidak dapat dibuat karena konverter romaji tidak tersedia.');
+                document.getElementById('progress-message').textContent = 'Furigana kanji belum dapat ditampilkan karena komponen pembaca romaji tidak tersedia.';
+                return '';
+            }
+            return wanakana.toHiragana(romaji).replace(/\s+/g, '');
+        }
+
+        function renderJapaneseWithReading(text, reading) {
+            if (!reading || !/[一-龯]/.test(text)) return escapeHtml(text);
+            const parts = text.match(/[一-龯]+|[^一-龯]+/g) || [text];
+            let cursor = 0;
+            const html = [];
+
+            for (let index = 0; index < parts.length; index += 1) {
+                const part = parts[index];
+                if (!/[一-龯]/.test(part)) {
+                    if (/[ぁ-ゖァ-ヺ]/.test(part)) {
+                        const kanaIndex = reading.indexOf(part, cursor);
+                        if (kanaIndex < cursor) return escapeHtml(text);
+                        cursor = kanaIndex + part.length;
+                    }
+                    html.push(escapeHtml(part));
+                    continue;
+                }
+
+                const nextKana = parts.slice(index + 1).find((candidate) => /[ぁ-ゖァ-ヺ]/.test(candidate));
+                const nextIndex = nextKana ? reading.indexOf(nextKana, cursor) : reading.length;
+                if (nextIndex <= cursor) return escapeHtml(text);
+                html.push(`<ruby>${escapeHtml(part)}<rt>${escapeHtml(reading.slice(cursor, nextIndex))}</rt></ruby>`);
+                cursor = nextIndex;
+            }
+
+            return html.join('');
+        }
+
+        function renderKanjiExample(example) {
+            const match = example.match(/^(.+?)\s*\(([^)]+)\)(.*)$/);
+            if (!match) return escapeHtml(example);
+            const reading = kanaReadingFromRomaji(match[2]);
+            const japanese = renderJapaneseWithReading(match[1].trim(), reading);
+            return `${japanese}${escapeHtml(match[3])}`;
+        }
+
+        function updateCardContent(data, index, direction) {
+            let frontText = '';
+            if (studyMode === 'quiz-rm-jp') {
+                frontText = data.sisi_belakang_romaji;
+                frontRomajiEl.innerText = data.arti_indonesia;
+            } else {
+                frontText = data.sisi_depan;
+                frontRomajiEl.innerText = data.sisi_belakang_romaji;
+            }
+            
+            const isKanjiCard = data.kategori === 'Kanji dasar';
+            const primaryReading = isKanjiCard
+                ? kanaReadingFromRomaji(data.sisi_belakang_romaji.split('/')[0].trim().replace(/\([^)]*\)/g, ''))
+                : '';
+            if (isKanjiCard && frontText === data.sisi_depan) {
+                frontKanaEl.innerHTML = renderJapaneseWithReading(frontText, primaryReading);
+            } else {
+                frontKanaEl.innerText = frontText;
+            }
+            
+            // Adjust font size dynamically for long sentences
+            if (frontText.length > 10) {
+                frontKanaEl.style.fontSize = '2rem';
+            } else if (frontText.length > 5) {
+                frontKanaEl.style.fontSize = '3rem';
+            } else {
+                frontKanaEl.style.fontSize = '5rem';
+            }
+            
+            categoryEl.innerText = data.kategori;
+            if (isKanjiCard) {
+                backKanaEl.innerHTML = renderJapaneseWithReading(data.sisi_belakang_kana, primaryReading);
+            } else {
+                backKanaEl.innerText = data.sisi_belakang_kana;
+            }
+            romajiEl.innerText = data.sisi_belakang_romaji;
+            meaningEl.innerText = data.arti_indonesia;
+            const usageText = data.kegunaan ? 'Kegunaan: ' + data.kegunaan : '';
+            const noteText = data.keterangan ? 'Keterangan: ' + data.keterangan : '';
+            document.getElementById('card-usage').innerText = usageText;
+            document.getElementById('card-note').innerText = noteText;
+            document.getElementById('card-usage').style.display = usageText ? 'block' : 'none';
+            document.getElementById('card-note').style.display = noteText ? 'block' : 'none';
+            if (isKanjiCard) {
+                exampleEl.innerHTML = renderKanjiExample(data.contoh_kalimat);
+            } else {
+                exampleEl.innerText = data.contoh_kalimat;
+            }
+            
+            currentIndexEl.innerText = index + 1;
+            const progress = ((index + 1) / totalCards) * 100;
+            progressBarEl.style.width = `${progress}%`;
+        }
+
+        function flipCard() {
+            if (currentCollection.length === 0) return;
+            if (studyMode !== 'flashcard') {
+                quizInput.focus();
+                return;
+            }
+            isFlipped = !isFlipped;
+            cardEl.classList.toggle('is-flipped');
+        }
+
+        function nextCard() {
+            if (currentCollection.length === 0) return;
+
+            if (studyMode !== 'flashcard') {
+                if (awaitingNextQuestion) {
+                    awaitingNextQuestion = false;
+                    quizInput.value = '';
+                    quizInput.disabled = false;
+                    document.getElementById('quiz-feedback').className = 'quiz-feedback';
+                    document.getElementById('quiz-feedback').textContent = '';
+                    if (currentIndex < totalCards - 1) {
+                        currentIndex++;
+                        loadCard(currentIndex, 'next');
+                        quizInput.focus();
+                        document.getElementById('btn-next').innerHTML = 'Periksa jawaban <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>';
+                    } else {
+                        showResults();
+                    }
+                    return;
+                }
+
+                const guess = quizInput.value.trim().toLowerCase();
+                let correct = '';
+                
+                if (studyMode === 'quiz-jp-rm') {
+                    correct = currentCollection[currentIndex].sisi_belakang_romaji.toLowerCase();
+                } else if (studyMode === 'quiz-rm-jp') {
+                    correct = currentCollection[currentIndex].sisi_depan.toLowerCase();
+                }
+                
+                const answer = {
+                    kana: currentCollection[currentIndex].sisi_depan,
+                    romaji: currentCollection[currentIndex].sisi_belakang_romaji,
+                    correct: correct,
+                    guess: guess,
+                    isCorrect: normalizeAnswer(guess) === normalizeAnswer(correct),
+                    mode: studyMode,
+                    isKanjiCard: currentCollection[currentIndex].kategori === 'Kanji dasar',
+                    furiganaReading: currentCollection[currentIndex].kategori === 'Kanji dasar'
+                        ? kanaReadingFromRomaji(currentCollection[currentIndex].sisi_belakang_romaji.split('/')[0].trim().replace(/\([^)]*\)/g, ''))
+                        : ''
+                };
+                quizAnswers.push(answer);
+                recordStudyActivity();
+                awaitingNextQuestion = true;
+                quizInput.disabled = true;
+                const feedback = document.getElementById('quiz-feedback');
+                feedback.className = answer.isCorrect ? 'quiz-feedback is-correct' : 'quiz-feedback is-incorrect';
+                const correctHtml = answer.isKanjiCard && studyMode === 'quiz-rm-jp'
+                    ? renderJapaneseWithReading(answer.correct, answer.furiganaReading)
+                    : escapeHtml(answer.correct);
+                feedback.innerHTML = answer.isCorrect
+                    ? `Benar! ${correctHtml}`
+                    : `Belum tepat. Jawaban yang benar: ${correctHtml}`;
+                document.getElementById('btn-next').innerHTML = currentIndex < totalCards - 1
+                    ? 'Soal berikutnya <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>'
+                    : 'Lihat hasil <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>';
+                quizInput.disabled = true;
+
+            } else {
+                if (currentIndex < totalCards - 1) {
+                    currentIndex++;
+                    loadCard(currentIndex, 'next');
+                } else {
+                    currentIndex = 0;
+                    loadCard(currentIndex, 'next');
+                }
+            }
+        }
+
+        function normalizeAnswer(value) {
+            return value.normalize('NFKC').replace(/\s+/g, '').toLocaleLowerCase();
+        }
+
+        function prevCard() {
+            if (currentCollection.length === 0) return;
+            if (studyMode !== 'flashcard') return; // Prevent going back in quiz mode
+
+            if (currentIndex > 0) {
+                currentIndex--;
+                loadCard(currentIndex, 'prev');
+            } else {
+                currentIndex = totalCards - 1; // Loop to end
+                loadCard(currentIndex, 'prev');
+            }
+        }
+
+        function shuffleCards() {
+            if (currentCollection.length === 0) return;
+            // Fisher-Yates shuffle
+            for (let i = currentCollection.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [currentCollection[i], currentCollection[j]] = [currentCollection[j], currentCollection[i]];
+            }
+            currentIndex = 0;
+            loadCard(currentIndex, 'next');
+            if (studyMode !== 'flashcard') quizInput.focus();
+        }
+
+        function showResults() {
+            document.getElementById('scene').style.display = 'none';
+            document.getElementById('controls').style.display = 'none';
+            document.getElementById('progress-container').style.display = 'none';
+            
+            const resultScreen = document.getElementById('result-screen');
+            resultScreen.style.display = 'block';
+            
+            const scoreEl = document.getElementById('result-score');
+            const listEl = document.getElementById('result-list');
+            
+            let correctCount = quizAnswers.filter(a => a.isCorrect).length;
+            scoreEl.innerText = `${correctCount} / ${totalCards}`;
+            
+            let html = '';
+            quizAnswers.forEach((ans) => {
+                const statusClass = ans.isCorrect ? 'ans-correct' : 'ans-incorrect';
+                const userGuess = escapeHtml(ans.guess || '(kosong)');
+                const icon = ans.isCorrect ? '✓' : '✗';
+                const questionText = ans.mode === 'quiz-rm-jp' ? ans.romaji : ans.kana;
+                const questionHtml = ans.isKanjiCard && ans.mode === 'quiz-jp-rm'
+                    ? renderJapaneseWithReading(questionText, ans.furiganaReading)
+                    : escapeHtml(questionText);
+                const correctHtml = ans.isKanjiCard && ans.mode === 'quiz-rm-jp'
+                    ? renderJapaneseWithReading(ans.correct, ans.furiganaReading)
+                    : escapeHtml(ans.correct);
+                
+                html += `
+                <div class="result-item">
+                    <div style="display: flex; align-items: center;">
+                        <span class="kana" style="font-size: 1rem; margin-right: 15px;">${questionHtml}</span>
+                        <span>${icon} Jawabanmu: <span class="${statusClass}">${userGuess}</span></span>
+                    </div>
+                    <div style="color: var(--text-muted); font-size: 0.85rem;">Asli: ${correctHtml}</div>
+                </div>`;
+            });
+            listEl.innerHTML = html;
+        }
+
+        function escapeHtml(value) {
+            return String(value).replace(/[&<>"']/g, (character) => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            })[character]);
+        }
+
+        function restartQuiz() {
+            quizAnswers = [];
+            currentIndex = 0;
+            quizInput.value = '';
+            quizInput.disabled = false;
+            awaitingNextQuestion = false;
+            
+            document.getElementById('result-screen').style.display = 'none';
+            document.getElementById('scene').style.display = 'block';
+            document.getElementById('controls').style.display = 'flex';
+            document.getElementById('progress-container').style.display = 'flex';
+            
+            shuffleCards(); 
+        }
+
+        // Enter key to next card in quiz mode
+        quizInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.isComposing) {
+                e.preventDefault();
+                nextCard();
+            }
+        });
+
+        // Keyboard navigation support
+        document.addEventListener('keydown', (e) => {
+            if (e.target instanceof Element && e.target.closest('button, a, select, textarea, input')) return;
+
+            if (e.target === cardEl && e.code === 'Enter') {
+                e.preventDefault();
+                flipCard();
+            } else if(e.code === 'Space' || e.code === 'ArrowUp' || e.code === 'ArrowDown') {
+                if(studyMode !== 'flashcard') return;
+                e.preventDefault(); // Prevent scrolling
+                flipCard();
+            } else if (e.code === 'ArrowRight') {
+                nextCard();
+            } else if (e.code === 'ArrowLeft') {
+                if(studyMode !== 'flashcard') return;
+                prevCard();
+            }
+        });
+    </script>
+</body>
+</html>
