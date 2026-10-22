@@ -1700,7 +1700,10 @@
                     romaji: currentCollection[currentIndex].sisi_belakang_romaji,
                     correct: correct,
                     guess: guess,
-                    isCorrect: normalizeAnswer(guess) === normalizeAnswer(correct),
+                    isCorrect: (currentCollection[currentIndex].kategori === 'Kanji dasar' && studyMode === 'quiz-jp-rm'
+                        ? correct.split('/').map(reading => reading.trim())
+                        : [correct]
+                    ).some(reading => normalizeAnswer(guess) === normalizeAnswer(reading)),
                     mode: studyMode,
                     isKanjiCard: currentCollection[currentIndex].kategori === 'Kanji dasar',
                     furiganaReading: currentCollection[currentIndex].kategori === 'Kanji dasar'
